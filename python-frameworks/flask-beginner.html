@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <!-- <section>
+      <span>Python-kurser</span>
+    </section> -->
+    <main>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <p>
+          Flask är ett mikro-ramverk för att skapa webbapplikationer med Python.
+          Man skulle kunna säga att Flask är programmet som körs på webbservern
+          för att få hemsidor (och APIer osv) att visas för användaren. Flask är
+          ett väldigt populärt ramverk och används av många stora företag som
+          till exempel Netflix, Lyft och Pinterest.
+        </p>
+        <h2 id="chapter-1">Innan vi börjar</h2>
+        <span class="anchor"><a href="#chapter-1">#</a></span>
+        <p>
+          Denna kurs är skriven för vana Python-utvecklare som vill lära sig
+          Flask. Jag kommer inte heller att gå igenom andra paket som eventuellt
+          kan behövas för att skapa en webbapplikation. Denna kurs fokuserar
+          bara på Flask.
+        </p>
+        <p>
+          I denna kurs kommer jag inte att förklara HTML eller CSS. Jag kommer
+          att utgå ifrån att användaren har grundläggande kunskaper i HTML och
+          CSS. Jag kommer att använda HTML och CSS för att skapa en enkel
+          hemsida som jag sedan kommer att visa med hjälp av Flask.
+        </p>
+
+        <!-- Pythonclass specific -->
+        <h2 id="chapter-2">Skapa en Virtuell Miljö</h2>
+        <span class="anchor"><a href="#chapter-2">#</a></span>
+        <p>
+          En virtuell miljö i Python gör att du kan hålla dina projekt
+          separerade med avseende på beroenden. Det betyder att varje projekt
+          kan ha sina egna beroenden, oberoende av vilka beroenden andra projekt
+          har.
+        </p>
+        <p>I VSCode skriv: i terminalen:</p>
+        <!-- prettier-ignore -->
+        <pre><code class="language-bash">python -m venv venv</code></pre>
+        <span class="note"
+          >Notera att venv är namnet på den virtuella miljön. Du kan döpa den
+          till vad du vill.</span
+        >
+        <p>Aktivera den virtuella miljön:</p>
+        <!-- prettier-ignore -->
+        <pre><span class="os-spec">Windows</span>
+<code class="language-bash" >.\venv\Scripts\activate</code></pre>
+        <pre><span class="os-spec">MacOS</span>
+<code class="language-bash">source venv/bin/activate</code></pre>
+
+        <span class="note"
+          >När den virtuella miljön är aktiverad, kommer du se namnet på miljön
+          inom parenteser i din terminal, <em>till exempel (venv)</em></span
+        >
+        <!-- /Pythonclass specific-->
+        <h2 id="chapter-3">Installera Flask</h2>
+        <span class="anchor"><a href="#chapter-3">#</a></span>
+        <p>
+          Var noggrann med att den virtuella miljön är aktiverad innan du börjar
+          installera Flask. Om du inte har aktiverat den virtuella miljön,
+          kommer Flask att installeras globalt på din dator och eventuellt skapa
+          problem!
+        </p>
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code>pip install flask</code></pre>
+
+        <p>
+          Flask är nu installerat och du kan börja skapa din första Flask
+          applikation, vi börjar enkelt, forsätt till nästa kapitel.
+        </p>
+        <h2 id="chapter-4">Den enklaste av applikationer</h2>
+        <span class="anchor"><a href="#chapter-4">#</a></span>
+        <p>
+          Nu när Flask är installerat kan vi skapa vår första applikation. Börja
+          med att säkerställa att allt funkar med att skapa en fil som heter
+          <code>app.py</code> och skriv följande kod:
+        </p>
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers">from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello World!"
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+
+        <p>Radförklaring här</p>
+
+        <h2 id="chapter-5">Nu kör vi!</h2>
+        <span class="anchor"><a href="#chapter-5">#</a></span>
+
+        <!-- prettier-ignore -->
+        <p>Kör din applikation genom att skriva följande i terminalen:</p>
+        <pre><code class="language-bash">python app.py</code></pre>
+        <span class="note"
+          >Det går såklart även att starta med "play", ctrl-f5 osv.</span
+        >
+        <p>
+          Nu har vi enkelt skapat din flask-app, härifrån så kommer det roliga!
+        </p>
+      </article>
+    </main>
+  </body>
+</html>

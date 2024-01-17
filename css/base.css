@@ -1,0 +1,13 @@
+.progress-container {
+  width: 100%;
+  height: 10px;
+  background: hsla(0, 0%, 80%, 0.536);
+  position: fixed;
+  z-index: 9999;
+}
+
+.progress-bar {
+  height: 10px;
+  background: #ff6666;
+  width: 0%;
+}
