@@ -98,77 +98,7 @@ body {
 .dark-theme {
   float: right;
 }
-/* 
-.theme-switch-wrapper {
-  display: flex;
-  align-items: center;
-  position: relative;
-  top: 15px;
-}
 
-.theme-switch-wrapper em {
-  margin-right: 10px;
-  font-size: 0.8rem;
-  color: var(--off-text-color);
-}
-
-.theme-switch-wrapper em svg {
-  fill: var(--article-title-font-color);
-}
-
-.theme-switch {
-  display: inline-block;
-  height: 24px;
-  position: relative;
-  width: 50px;
-}
-
-.theme-switch input {
-  display: none;
-}
-
-.slider {
-  background-color: #444;
-  bottom: 0;
-  cursor: pointer;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transition: 0.4s;
-}
-
-.slider:before {
-  background-color: var(--white);
-  bottom: 4px;
-  content: "";
-  height: 16px;
-  left: 4px;
-  position: absolute;
-  transition: 0.4s;
-  width: 16px;
-}
-
-input:checked + .slider {
-  background-color: var(--accent-color);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-} */
-
-.toggle-container {
-  position: relative;
-  top: 15px;
-  cursor: pointer;
-  width: 25px;
-  height: 25px;
+.toggle-container img {
+  box-shadow: none;
 }
