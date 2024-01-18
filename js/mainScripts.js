@@ -66,8 +66,8 @@ function toggleTheme() {
   const storedTheme = localStorage.getItem("theme");
 
   if (storedTheme === "dark") {
-    themeSwitch.innerHTML = `<img src="./assets/sun.svg" alt="Light Mode" />`;
+    themeSwitch.innerHTML = `<img src=".PVSPYH23/assets/sun.svg" alt="Light Mode" />`;
   } else {
-    themeSwitch.innerHTML = `<img src="./assets/moon.svg" alt="Dark Mode" />`;
+    themeSwitch.innerHTML = `<img src=".PVSPYH23/assets/moon.svg" alt="Dark Mode" />`;
   }
 }
