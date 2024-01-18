@@ -15,33 +15,6 @@ function smoothscroll() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// const toggleSwitch = document.querySelector(
-//   '.theme-switch input[type="checkbox"]'
-// );
-// const currentTheme = localStorage.getItem("theme");
-
-// if (currentTheme) {
-//   document.documentElement.setAttribute("data-theme", currentTheme);
-
-//   if (currentTheme === "dark") {
-//     toggleSwitch.checked = true;
-//   }
-// }
-
-// function switchTheme(event) {
-//   if (event.target.checked) {
-//     document.documentElement.setAttribute("data-theme", "dark");
-//     localStorage.setItem("theme", "dark");
-//   } else {
-//     document.documentElement.setAttribute("data-theme", "light");
-//     localStorage.setItem("theme", "light");
-//   }
-// }
-
-// toggleSwitch.addEventListener("change", switchTheme, false);
-
-/* load theme from local storage and set */
-
 window.addEventListener("load", function () {
   const theme = localStorage.getItem("theme");
   if (theme) {

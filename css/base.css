@@ -101,4 +101,5 @@ body {
 
 .toggle-container img {
   box-shadow: none;
+  cursor: pointer;
 }
