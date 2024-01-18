@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,10 +28,19 @@
     <div class="progress-container">
       <div class="progress-bar" id="progress-bar"></div>
     </div>
-    <!-- <section>
-      <span>Python-kurser</span>
-    </section> -->
     <main>
+      <section class="dark-theme">
+        <!-- <div class="theme-switch-wrapper">
+          <em>Dark </em>
+          <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider round"></div>
+          </label>
+        </div> -->
+        <div class="toggle-container">
+          <img src="/assets/moon.svg" alt="Dark Mode" />
+        </div>
+      </section>
       <h1>Flask - Lätt och krafullt</h1>
       <h3 class="subtitle">PVSPYH23 Edition</h3>
 
@@ -47,12 +56,12 @@
         <span class="anchor"><a href="#chapter-1">#</a></span>
         <p>
           Denna kurs är skriven för vana Python-utvecklare som vill lära sig
-          Flask. Jag kommer inte heller att gå igenom andra paket som eventuellt
-          kan behövas för att skapa en webbapplikation. Denna kurs fokuserar
-          bara på Flask.
+          Flask. Jag kommer inte att gå igenom andra paket som eventuellt kan
+          behövas för att skapa en webbapplikation. Denna kurs fokuserar jag
+          bara på att lära ut Flask.
         </p>
         <p>
-          I denna kurs kommer jag inte att förklara HTML eller CSS. Jag kommer
+          Denna kurs kommer inte att förklara någon HTML eller CSS. Jag kommer
           att utgå ifrån att användaren har grundläggande kunskaper i HTML och
           CSS. Jag kommer att använda HTML och CSS för att skapa en enkel
           hemsida som jag sedan kommer att visa med hjälp av Flask.
@@ -66,6 +75,10 @@
           separerade med avseende på beroenden. Det betyder att varje projekt
           kan ha sina egna beroenden, oberoende av vilka beroenden andra projekt
           har.
+        </p>
+        <p>
+          Detta är bra att lära sig att ha som vana i alla projekt, men är inget
+          måste att göra!
         </p>
         <p>I VSCode skriv: i terminalen:</p>
         <!-- prettier-ignore -->
@@ -112,14 +125,41 @@
         <pre><code class="language-python line-numbers">from flask import Flask
 app = Flask(__name__)
 
-@app.route("/")
-def home():
+@app.route("/") # Dekoratör från flask
+def index():
     return "Hello World!"
 
 if __name__ == "__main__":
     app.run(debug=True)</code></pre>
 
-        <p>Radförklaring här</p>
+        <span class="note">
+          Notera att Flask är klassen som vi importerar från paketet flask.
+          Därav stor bokstav i Flask.
+        </span>
+
+        <p>
+          På <mark> rad 4</mark> använder vi en dekoratör;
+          <code>@app.route("/")</code>.<br />Den kommer från paktet Flask och
+          används för att koppla en URL till en funktion. I detta fall så
+          kopplar vi URL:en "/" till funktionen <code>index()</code>. Detta
+          betyder att när en användare går till "/" så kommer funktionen
+          <code>index()</code> att köras.
+        </p>
+        <h3>Överkurs: Vad är index?</h3>
+        <p>
+          Förr var internet en samling av servrar och fungerade lite annorlunda
+          än idag. När man kom in på en server så fanns det ofta en fil som
+          hette <code>index</code>. Detta var den fil som listade
+          <em>(indexerade)</em> alla filer på servern och varför den kallades
+          för index. Detta har sedan dess blivit en standard för att visa en
+          startsida på en server.
+        </p>
+        <p>
+          På nästan alla server-typer används idag <code>index.*</code> som den
+          filen som letas upp om inget annat anges. Det är därför du kan skriva
+          <code>google.com</code> och komma till Google, istället för att skriva
+          <code>google.com/index.html</code>.
+        </p>
 
         <h2 id="chapter-5">Nu kör vi!</h2>
         <span class="anchor"><a href="#chapter-5">#</a></span>
