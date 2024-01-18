@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode"
+          />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">Kapitel 3 - Sökvägar</h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>
+          I det här kapitlet ska vi gå igenom hur man lägger till fler sidor i
+          våra dynamiska webbapplikation. Det gör vi genom att lägga till
+          sökvägar (Routes). Sökvägar är det som gör att vi kan gå från en sida
+          till en annan.
+        </p>
+        <h2 id="section-1">Sökvägar</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+        <p>
+          Vi har det från början, vi har redan i det första exemplet gjort en
+          sökväg. I filen <code>app.py</code>. Sökvägen till root-katalogen, den
+          sk. index-filen såg ut såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python">@app.route("/")</code></pre>
+
+        <p>Alltså dekoratören som redan är skriven i flask-paketet.</p>
+        <p>
+          Här kan du välja vilket namn du vill på sökvägen. Dvs. vad användaren
+          skriver efter din servers namn eller webbadress. Vi ska till exempel
+          göra en som heter "exempel", och lägga den ovanpå vår befintliga.
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python line-numbers">@app.route("/exempel") # Testa lägg den här
+@app.route("/")
+def index():
+    return render_template("index.html", variabel = 13 * 2)</code></pre>
+        <p>
+          Nu kan vi skriva <code>127.0.0.1/exempel</code> i sökfältet på
+          webbläsaren och komma till samma route som när vi bara skrev
+          <code>localhost</code>:
+        </p>
+
+        <img src="assets/route-exempel-1.png" alt="Flask route exempel 1" />
+
+        <p>
+          För att lägga till en sida med annat innhåll så måste dekoratören en
+          annan funktion att dekorera. Vi kan till exempel skapa en funktion som
+          heter "exempel" och lägga den under vår index-funktion. Och så flyttar
+          vi exempel-dekoratören dit istället:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python line-numbers">@app.route("/")
+def index():
+    return render_template("index.html", variabel = 13 * 2)
+
+@app.route("/exempel") # Flyttad hit
+def exempel():
+    return "Det här är en exempelsida"</code></pre>
+
+        <span class="note"
+          >Notera att vi inte behöver skriva "exempel.html" i
+          <code>render_template()</code> eftersom att vi inte har någon html-fil
+          som heter "exempel.html".</span
+        >
+
+        <p>
+          Nu kan vi skriva<code> 127.0.0.1/exempel</code> i sökfältet på
+          webblläsaren och komma till vår "nya" sida. För att lägga till en till
+          riktig sida så gör vi om exemplet från förra kapitlet.
+        </p>
+
+        <h2 id="section-2">Skapa en till sida</h2>
+        <span class="anchor"><a href="#section-2">#</a></span>
+        <p>
+          Vi börjar med att skapa en ny fil som heter <code>exempel.html</code>.
+          I den filen skriver vi följande:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-html"><code class="language-jinja2 line-numbers">{% extends "template.html" %}
+{% block content %}
+    Exempel
+{% endblock %}</code></pre>
+
+        <p>
+          Vi måste också skriva om funktionen <code>exempel</code> för att den
+          ska rendera rätt sida:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python line-numbers">@app.route("/exempel")
+def exempel():
+    return render_template("exempel.html")</code></pre>
+      </article>
+
+      <p>
+        Nu när vi skriver <code>127.0.0.1/exempel</code> så har vi fått upp en
+        ny sida. Med vårat innehåll "exempel".
+      </p>
+
+      <section class="next">
+        <a href="flask-beginner-2.html">&larr; Föregående kapitel</a> -
+        <span class="disabled">Nästa kapitel &rarr;</span>
+      </section>
+    </main>
+  </body>
+</html>
