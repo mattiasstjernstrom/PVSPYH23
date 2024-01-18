@@ -38,7 +38,7 @@
           </label>
         </div> -->
         <div class="toggle-container">
-          <img src="/assets/moon.svg" alt="Dark Mode" />
+          <img src="assets/moon.svg" alt="Dark Mode" />
         </div>
       </section>
       <h1>Flask - Lätt och krafullt</h1>
@@ -145,7 +145,7 @@ if __name__ == "__main__":
           betyder att när en användare går till "/" så kommer funktionen
           <code>index()</code> att köras.
         </p>
-        <h3>Överkurs: Vad är index?</h3>
+        <h3>Vad är index?</h3>
         <p>
           Förr var internet en samling av servrar och fungerade lite annorlunda
           än idag. När man kom in på en server så fanns det ofta en fil som
@@ -171,9 +171,48 @@ if __name__ == "__main__":
           >Det går såklart även att starta med "play", ctrl-f5 osv.</span
         >
         <p>
-          Nu har vi enkelt skapat din flask-app, härifrån så kommer det roliga!
+          Nu bör det se ut ungefär såhär i din terminal:
+          <br />
+          <img src="assets/flask-terminal-start.png" alt="Flask terminal" />
+          <span class="note"
+            >Notera att din terminals utseende skiljer sig säker från min,
+            texten ska va den samma</span
+          >
         </p>
+        <p>
+          Om vi nu går till <code>127.0.0.1:5000</code> i vår webbläsare så bör
+          vi ungefär det här:
+        </p>
+        <img src="assets/hello-world.png" alt="Flask browser" />
+
+        <p>Nu har vi gjort vår första applikation! 🥳</p>
+        <h3>Vad hände?</h3>
+        <p>
+          När vi kör <code>app.py</code>, så startas en lokal server på din
+          dator, detta är en server som är inbyggd i Flask. En sk.
+          development-server som är till för att utveckla applikationer. Detta
+          är inte en server som är till för att användas i produktion.
+        </p>
+        <p>
+          När vi går till <code>127.0.0.1:5000</code> så ber vi webbläsaren att
+          gå och leta på datorn efter en lokal server på datorn, i detta fallet
+          en server som lyssnar på port-nummret 5000.
+        </p>
+        <h4>Vad är localhost?</h4>
+        <p>
+          <code>127.0.0.1</code>, <code>0.0.0.0</code> eller
+          <code>localhost</code> är IP-adresser som är reserverad för att peka
+          på den egna datorn. Detta är en IP-adress som alltid kommer att peka
+          på din egen dator, oavsett vilken dator du sitter vid. Detta är en
+          IP-adress som kallas för <code>localhost</code> och används ofta för
+          att testa lokala servrar.
+        </p>
+        <span class="note"
+          >Notera att en server på localhost, inte nås av någon annan än de som
+          är uppkopplade på ditt nätverk</span
+        >
       </article>
+      <section><br />Nästa Kapitel &rarr;</section>
     </main>
   </body>
 </html>

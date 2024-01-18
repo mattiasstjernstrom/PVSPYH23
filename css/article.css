@@ -7,6 +7,14 @@ main article {
   padding: var(--article-padding);
 }
 
+main img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 0.8rem auto;
+}
+
 a {
   color: var(--article-link-color);
   text-decoration: var(--article-link-text-decoration);
