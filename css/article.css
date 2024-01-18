@@ -129,3 +129,13 @@ code:not(pre code) {
 .subtitle::after {
   margin-left: 1em;
 }
+
+section.next {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: var(--grey);
+}
