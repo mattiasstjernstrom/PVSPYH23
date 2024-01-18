@@ -130,66 +130,79 @@ def exempel():
         <pre class="language-python"><code class="language-python line-numbers">@app.route("/exempel")
 def exempel():
     return render_template("exempel.html")</code></pre>
-      </article>
 
-      <p>
-        Nu när vi skriver <code>127.0.0.1/exempel</code> så har vi fått upp en
-        ny sida. Med vårat innehåll "exempel".
-      </p>
+        <p>
+          Nu när vi skriver <code>127.0.0.1/exempel</code> så har vi fått upp en
+          ny sida. Med vårat innehåll "exempel".
+        </p>
 
-      <h2 id="section-3">Länkar</h2>
-      <span class="anchor"><a href="#section-3">#</a></span>
+        <h2 id="section-3">Länkar</h2>
+        <span class="anchor"><a href="#section-3">#</a></span>
 
-      <p>
-        För att kunna gå mellan sidorna så behöver vi lägga till länkar. För att
-        komma till rätt sökväg så fungerar det inte alltid att skriva:
+        <p>
+          För att kunna gå mellan sidorna så behöver vi lägga till länkar. För
+          att komma till rätt sökväg så fungerar det inte alltid att skriva:
+          <!-- prettier-ignore -->
+          <code>&lt;a href="/exempel"&gt;</code>
+
+          i html-filen. För att undvika problem senare i programmet så kommer vi
+          att använda oss av en funktion från flask som heter
+          <code>url_for()</code>. Den funktionen gör att vi kan skriva sökvägen
+          till en sida utan att behöva skriva in den manuellt.
+        </p>
+        <p>
+          Vi börjar med att skriva om vår <code>exempel.html</code>-fil så att
+          den ser ut såhär:
+        </p>
+
         <!-- prettier-ignore -->
-        <code>&lt;a href="/exempel"&gt;</code>
-
-        i html-filen. För att undvika problem senare i programmet så kommer vi
-        att använda oss av en funktion från flask som heter
-        <code>url_for()</code>. Den funktionen gör att vi kan skriva sökvägen
-        till en sida utan att behöva skriva in den manuellt.
-      </p>
-      <p>
-        Vi börjar med att skriva om vår <code>exempel.html</code>-fil så att den
-        ser ut såhär:
-      </p>
-
-      <!-- prettier-ignore -->
-      <pre class="language-html"><code class="language-jinja2 line-numbers">{% extends "template.html" %}
+        <pre class="language-html"><code class="language-jinja2 line-numbers">{% extends "template.html" %}
 {% block content %}
     Exempel
     &lt;a href="{{ url_for('index') }}"&gt;Tillbaka&lt;/a&gt;
 {% endblock %}
 </code></pre>
 
-      <p>
-        Notera att vi använder funktionens namn som en sträng i
-        <code>url_for()</code> och inte sökvägen till funktionen. Detta är för
-        att flask ska kunna hitta funktionen och skapa en sökväg till den. Vi
-        skulle alltså till exempel kunna döpa funktionen <code>index</code> till
-        <code> inte_index</code> men den skulle fortfarande ha samma sökväg i
-        webbläsaren:
-      </p>
+        <p>Vi kan även lägga till en länk till vår nya sida i index-filen:</p>
 
-      <!-- prettier-ignore -->
-      <pre class="language-html"><code class="language-python">@app.route("/") # Index-sökvägen
+        <!-- prettier-ignore -->
+        <pre class="language-html"><code class="language-jinja2 line-numbers">{% extends "template.html" %}
+{% block content %}
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+    &lt;p&gt;{{ variabel }}&lt;/p&gt;
+    &lt;a href="{{ url_for('exempel') }}"&gt;Exempel&lt;/a&gt;
+{% endblock %}</code></pre>
+
+        <p>
+          Så har vi skapat oss en länk fram och tillbaks mellan de två sidorna.
+        </p>
+
+        <p>
+          Notera att vi använder funktionens namn som en sträng i
+          <code>url_for()</code> och inte sökvägen till funktionen. Detta är för
+          att flask ska kunna hitta funktionen och skapa en sökväg till den. Vi
+          skulle alltså till exempel kunna döpa funktionen
+          <code>index</code> till <code> inte_index</code> men den skulle
+          fortfarande ha samma sökväg i webbläsaren:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-html"><code class="language-python">@app.route("/") # Index-sökvägen
 def inte_index():</code></pre>
-      <pre
-        class="language-html"
-      ><code class="language-jinja2">&lt;a href="{{ url_for('inte_index') }}"&gt;Förstasidan&lt;/a&gt;</code></pre>
-      <span class="note">Kom ihåg: Url_for: Funktion, inte route</span>
-      <p>Skulle ändå bli <code>127.0.0.1/</code></p>
+        <pre
+          class="language-html"
+        ><code class="language-jinja2">&lt;a href="{{ url_for('inte_index') }}"&gt;Förstasidan&lt;/a&gt;</code></pre>
+        <span class="note">Kom ihåg: Url_for: Funktion, inte route</span>
+        <p>Skulle ändå bli <code>127.0.0.1/</code></p>
 
-      <p>
-        I nästa kapitel ska vi gå igenom hur vi kan skicka data mellan server
-        och applikation.
-      </p>
-
+        <p>
+          I nästa kapitel ska vi gå igenom hur vi kan skicka data mellan server
+          och applikation.
+        </p>
+      </article>
       <section class="next">
         <a href="flask-beginner-2.html">&larr; Föregående kapitel</a> -
-        <span class="disabled">Nästa kapitel &rarr;</span>
+        <a href="flask-beginner-4.html">Nästa kapitel &rarr;</a>
       </section>
     </main>
   </body>
