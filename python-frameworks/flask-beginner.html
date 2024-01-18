@@ -81,8 +81,8 @@
         <!-- prettier-ignore -->
         <pre><code class="language-bash">python -m venv venv</code></pre>
         <span class="note"
-          >Notera att den andra venv är namnet på den virtuella miljön. Du kan
-          döpa den till vad du vill.</span
+          >Notera att den andra/sista venv är namnet på den virtuella miljön. Du
+          kan döpa den till vad du vill.</span
         >
         <p>Aktivera den virtuella miljön:</p>
         <!-- prettier-ignore -->
@@ -194,6 +194,19 @@ if __name__ == "__main__":
           När vi går till <code>127.0.0.1:5000</code> så ber vi webbläsaren att
           gå och leta på datorn efter en lokal server på datorn, i detta fallet
           en server som lyssnar på port-nummret 5000.
+        </p>
+        <p>
+          När webbläsaren hittar servern så skickar den en förfrågan till
+          servern, i detta fallet en GET-förfrågan. Detta är en förfrågan som
+          ber om att få ta del av informationen på servern. Detta är en förfråga
+          som skickas varje gång du går in på en hemsida.
+        </p>
+        <p>
+          Våran flask-applikation returerar stängen:
+          <code>"Hello World!"</code> och det är den returen som webbläsaren får
+          tillbaks på sin GET-förfrågan och i sin tur ritar upp på skärmen.<br />
+          I det här fallet skickar vi ingen HTML, men webbläsaren tolkar vår
+          sträng som HTML och ritar upp den som sådan.
         </p>
         <h4>Vad är localhost?</h4>
         <p>
