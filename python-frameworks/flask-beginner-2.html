@@ -45,7 +45,7 @@
         <span class="anchor"><a href="#section-head">#</a></span>
         <p>
           I förra kapitlet så kom vi igång med hur vi passar en sträng till
-          webläsaren från Flask. I detta kapitel får vi bekanta oss med att
+          webbläsaren från Flask. I detta kapitel får vi bekanta oss med att
           skapa lite roligare innehåll i våran applikation.
         </p>
         <h2 id="section-1">Html istället för sträng</h2>
@@ -77,7 +77,7 @@
         <p>Så här ska strukturen se ut:</p>
         <img src="assets/explorer-create-template-1.png" alt="Flask Explorer" />
         <p>
-          Nu gör vi om vår <code>hello_world</code>-funktion från det första
+          Nu gör vi om vår <code>index()</code>-funktion från det första
           kapitlet så att den använder <code>render_template</code>-funktionen
           istället för att skicka en sträng:
         </p>
@@ -104,10 +104,10 @@ if __name__ == "__main__":
         <h2 id="section-2">Dynamiskt istället för statiskt</h2>
         <span class="anchor"><a href="#section-2">#</a></span>
         <p>
-          Men det här sättet är inte så användbart i längden. Vi vill kunna
-          skicka olika saker till webbläsaren beroende på vad användaren vill
-          se. Annars så skulle man köra en statisk sida som inte ändras. Detta
-          kan vi göra genom att skicka med argument till
+          Men det här sättet är inte heller så användbart i längden. Vi vill
+          kunna skicka olika saker till webbläsaren beroende på vad användaren
+          vill se. Annars så skulle man köra en statisk sida som inte ändras.
+          Detta kan vi göra genom att skicka med argument till
           <code>render_template</code>-funktionen, vi testar skicka med en liten
           uträkning:
         </p>
@@ -217,9 +217,8 @@ if __name__ == "__main__":
             <code>{% endblock %}</code> i <code>template.html</code> att visas.
           </li>
           <li>
-            <code>{% endblock %}</code> i <code>template.html</code>. Detta gör
-            att vi kan skriva innehållet i <code>index.html</code> och sedan
-            använda oss av <code>template.html</code> som grundmall.
+            Detta gör att vi kan skriva innehållet i <code>index.html</code> och
+            sedan använda oss av <code>template.html</code> som grundmall.
           </li>
         </ul>
 
