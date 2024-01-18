@@ -54,7 +54,7 @@
         <p>
           Vi har redan gjort det från början, vi har redan i det första exemplet
           gjort en sökväg. I filen <code>app.py</code>. Sökvägen till
-          root-katalogen, den sk. index-filen såg ut såhär:
+          root-katalogen, den sk. index-routen såg ut såhär:
         </p>
 
         <!-- prettier-ignore -->
@@ -75,16 +75,16 @@ def index():
         <p>
           Nu kan vi skriva <code>127.0.0.1/exempel</code> i sökfältet på
           webbläsaren och komma till samma route som när vi bara skrev
-          <code>localhost</code>:
+          <code>127.0.0.1</code>:
         </p>
 
         <img src="assets/route-exempel-1.png" alt="Flask route exempel 1" />
 
         <p>
-          För att lägga till en sida med annat innhåll så måste dekoratören en
-          annan funktion att dekorera. Vi kan till exempel skapa en funktion som
-          heter "exempel" och lägga den under vår index-funktion. Och så flyttar
-          vi exempel-dekoratören dit istället:
+          För att lägga till en sida med annat innhåll så måste dekoratören ha
+          en annan funktion att dekorera. Vi kan till exempel skapa en funktion
+          som heter "exempel" och lägga den under vår index-funktion. Och så
+          flyttar vi exempel-dekoratören dit istället:
         </p>
 
         <!-- prettier-ignore -->
