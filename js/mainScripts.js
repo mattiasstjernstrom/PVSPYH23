@@ -66,8 +66,8 @@ function toggleTheme() {
   const storedTheme = localStorage.getItem("theme");
 
   if (storedTheme === "dark") {
-    themeSwitch.innerHTML = `<img src="https://raw.githubusercontent.com/mattiasstjernstrom/PVSPYH23/df9c901c1cda27f3b8b15ff74ff41215fe6c35db/assets/sun.svg" alt="Light Mode" />`;
+    themeSwitch.innerHTML = `<img src="./assets/sun.svg" alt="Light Mode" />`;
   } else {
-    themeSwitch.innerHTML = `<img src="https://raw.githubusercontent.com/mattiasstjernstrom/PVSPYH23/df9c901c1cda27f3b8b15ff74ff41215fe6c35db/assets/moon.svg" alt="Dark Mode" />`;
+    themeSwitch.innerHTML = `<img src="./assets/moon.svg" alt="Dark Mode" />`;
   }
 }
