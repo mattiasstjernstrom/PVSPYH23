@@ -26,6 +26,8 @@
   --grey: #c4c4c4;
   --white: #fff;
   --light-grey: #d6d6d6;
+
+  --code-color: #eeeeee;
 }
 
 /* dark mode */
@@ -58,6 +60,8 @@
   --grey: #c4c4c4;
   --white: #fff;
   --light-grey: #d6d6d6;
+
+  --code-color: #595959;
 }
 
 * {
