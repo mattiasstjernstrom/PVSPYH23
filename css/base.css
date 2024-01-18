@@ -22,6 +22,7 @@
   --article-title-line-height: 1.5;
   --article-title-font-family: "Roboto Condensed", sans-serif;
   --article-title-font-color: #242424;
+  --article-link-color: dodgerblue;
 
   --grey: #c4c4c4;
   --white: #fff;
@@ -56,6 +57,7 @@
   --article-title-line-height: 1.5;
   --article-title-font-family: "Roboto Condensed", sans-serif;
   --article-title-font-color: #fff;
+  ----article-link-color: dodgerblue;
 
   --grey: #c4c4c4;
   --white: #fff;

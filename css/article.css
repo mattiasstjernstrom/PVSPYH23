@@ -17,12 +17,11 @@ main img {
 
 a {
   color: var(--article-link-color);
-  text-decoration: var(--article-link-text-decoration);
+  text-decoration: underline;
 }
 
 a:hover {
-  color: var(--article-link-hover-color);
-  text-decoration: var(--article-link-hover-text-decoration);
+  text-decoration: none;
 }
 
 h1 {
@@ -133,6 +132,11 @@ code:not(pre code) {
 section.next {
   padding: 1rem 0;
   text-align: center;
+}
+
+section.next a:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
 }
 
 .disabled {

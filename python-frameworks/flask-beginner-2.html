@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode"
+          />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">Kapitel 2 - Skapa dynamik</h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>
+          I förra kapitlet så kom vi igång med hur vi passar en sträng till
+          webläsaren från Flask. I detta kapitel får vi bekanta oss med att
+          skapa lite roligare innehåll i våran applikation.
+        </p>
+        <h2 id="section-1">Html istället för sträng</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+        <p>
+          I förra kapitlet så skickade vi en sträng till webläsaren. Detta är
+          inte så användbart i längden. Vi vill kunna skicka html till
+          webbläsaren. Detta kan vi göra genom att använda oss av en funktion
+          som heter <code>render_template</code>. Denna funktion finns färdig i
+          paketet <code>flask</code> och vi kan importera den genom att skriva
+          följande kod:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python">from flask import render_template</code></pre>
+
+        <p>
+          Render Template är en funktion som tar emot en sträng som argument.
+          Denna sträng är sökvägen till en html-fil. Flask kommer att leta efter
+          denna fil i en mapp som heter <code>templates</code>. Vi kan skapa
+          denna mapp i vårat projekt och skapa en fil som heter
+          <code>index.html</code> i denna mapp. Vi kan sedan skriva följande kod
+          i denna fil:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-html">&lt;h1&gt;Hello World!&lt;h1&gt;</code></pre>
+
+        <p>Så här ska strukturen se ut:</p>
+        <img src="assets/explorer-create-template-1.png" alt="Flask Explorer" />
+        <p>
+          Nu gör vi om vår <code>hello_world</code>-funktion från det första
+          kapitlet så att den använder <code>render_template</code>-funktionen
+          istället för att skicka en sträng:
+        </p>
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers">from flask import Flask, render_template # Glöm inte att importera klassen Flask
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return render_template("index.html") # Funktion med argumentet index.html
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+
+        <p>
+          Nu när vi sparat båda filerna så kan vi uppdatera sidan i webbläsaren:
+        </p>
+        <img src="assets/hello-world-h1.png" alt="Flask Hello World HTML" />
+        <p>
+          Nu returerar din server tillbaks din html-sida till användaren
+          istället för en sträng, som i första kapitlet.
+        </p>
+
+        <h2 id="section-2">Dynamiskt istället för statiskt</h2>
+        <span class="anchor"><a href="#section-2">#</a></span>
+        <p>
+          Men det här sättet är inte så användbart i längden. Vi vill kunna
+          skicka olika saker till webbläsaren beroende på vad användaren vill
+          se. Annars så skulle man köra en statisk sida som inte ändras. Detta
+          kan vi göra genom att skicka med argument till
+          <code>render_template</code>-funktionen, vi testar skicka med en liten
+          uträkning:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python">return render_template("index.html", variabel = 13 * 2)</code></pre>
+
+        <h3>Blanda html och python</h3>
+        Eftersom html i sig är statiskt och inte kan utföra något annat än att
+        strukturera på egen hand. Så krävs det ett annat programmeringspråk för
+        att kunna utföra något. Flask använder sig av
+        <a href="https://jinja.palletsprojects.com/en/2.11.x/">Jinja</a>, som är
+        ett templating-språk som är skrivet i python. Detta gör att vi kan
+        använda oss av python i våra html-filer. <br /><br /><span class="note"
+          >Jinja kommer förinstallerat med flask, så du behöver inte installera
+          något.</span
+        >
+
+        <h2 id="section-3">Vi tar emot en python-variabel</h2>
+        <span class="anchor"><a href="#section-3">#</a></span>
+        <p>Vi lägger nu till en rad i <code>index.html</code>:</p>
+        <pre><code class="language-html">&lt;h1&gt;Hello World!&lt;h1&gt;
+&lt;p&gt;{{ variabel }}&lt;/p&gt;</code></pre>
+
+        <p>
+          Ladda om sidan, och där har du, istället för en konstig text med
+          måsvingar eller sträng "13*2", så har python gjort som de ska och
+          räknat ut 13*2 och skickat tillbaks 26.
+        </p>
+        <h3>Hur fungerar det här?</h3>
+        <p>
+          För att vi ska kunna använda oss av python i html-filer så måste flask
+          tolka hela koden innan den skickas till webbläsaren. Detta gör den
+          genom att läsa av hela filen och sortera ut vad som är html och vad
+          som är Jinja. Där flask hittar måsvingar så vet den att det är Jinja
+          och att det ska tolkas som python, mer eller mindre. I det här fallet
+          så har vi skickat med en variabel som vi döpt till "variabel" och gett
+          den värdet 13*2. Flask har då tolkat detta som en variabel som heter
+          "variabel" och som python redan gett den värdet 26 innan flask gjorde
+          sitt.
+        </p>
+
+        <h2 id="section-4">Ännu mer dynamik</h2>
+        <span class="anchor"><a href="#section-4">#</a></span>
+        <p>
+          Nu har vi gjort vår första dynamiska html-sida. Vi ska exprementera
+          mer med variabler i senare kapitel. Men först, så ska vi kolla på hur
+          vi kan skapa ännu mer dynamiska sidor.
+        </p>
+        <p>
+          Vi börjar med att skapa en ny html-fil i mappen
+          <code>templates</code>, den kan vi döpa till
+          <code>template.html</code> (vissa väljer att döpa den till layout
+          osv.). I denna fil så skriver vi följande kod:
+        </p>
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2 line-numbers">&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Exempel&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    {% block content %}  &lt;!-- Notera: % --&gt;
+        Något gick fel, kunde inte ladda innehåll!
+    {% endblock %}
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+        <p>
+          Detta kommer att vara vårat skal till sidan. Här kan vi till exempel
+          göra all layout utan att behöva ändra på fler statiska sidor, vilket
+          kan bli jobbigt redan efter några stycken html-sidor.
+        </p>
+        <p>
+          Innehållet på sidan tar vi in dynamsikt. Men vi måste anpassa vår
+          befintliga kod en del.
+        </p>
+        <p>
+          Vi börjar med att skriva om innehållet i <code>index.html</code> lite
+          så här:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2 line-numbers">{% extends "template.html" %}
+{% block content %}
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+    &lt;p&gt;{{ variabel }}&lt;/p&gt;
+{% endblock %}</code></pre>
+
+        <h3>Kodsammanfattning</h3>
+        <p>Vi har nu gjort följande:</p>
+        <ul>
+          <li>
+            Lagt till <code>{% extends "template.html" %}</code> som säger att
+            vi ska använda oss av <code>template.html</code> som grundmall.
+          </li>
+
+          <li>
+            Vi har också lagt till <code>{% block content %}</code> och
+            <code>{% endblock %}</code> som säger att allt som står mellan dessa
+            två rader ska ersätta <code>{% block content %}</code> i
+            <code>template.html</code>.
+          </li>
+          <li>
+            Skulle det inte finnas någon <code>{% block content %}</code>, eller
+            bli något annat fel på sidan så kommer felmeddelandet som vi har
+            skrivit mellan <code>{% block content %}</code> och
+            <code>{% endblock %}</code> i <code>template.html</code> att visas.
+          </li>
+          <li>
+            <code>{% endblock %}</code> i <code>template.html</code>. Detta gör
+            att vi kan skriva innehållet i <code>index.html</code> och sedan
+            använda oss av <code>template.html</code> som grundmall.
+          </li>
+        </ul>
+
+        <p>
+          Resultatet bör nu vara exakt lika som innan, men uppdelat på två
+          filer. Därför ska vi i nästa kapitel skapa ännu en sida för att göra
+          exemplet tydligare.
+        </p>
+
+        <h4>Måsvingar och procent-tecken?</h4>
+        <p>
+          I exemplet ovan ser vi använding av två av de vanligaste markrörerna
+          (synopsis) i Jinja. Skillnaden mellan dessa är att måsvingarna används
+          för att skicka tillbaks något till webbläsaren, medans procent-tecknen
+          används för att utföra något i själva koden.
+        </p>
+      </article>
+
+      <section class="next">
+        <span class="disabled">Nästa Kapitel &rarr;</span>
+      </section>
+    </main>
+  </body>
+</html>
