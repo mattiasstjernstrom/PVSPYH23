@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode"
+          />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">Kapitel 6 - Jinja2</h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>
+          Som jag har nämnt innan, så använder sig Flask av ett templating-språk
+          som heter Jinja2. Vi har fått kännt på det tidigare. I det här
+          kapitlet ska vi gå igenom lite vad som finns att tillgå i Jinja.
+        </p>
+        <h2 id="section-head-1">Render Template - Vad händer?</h2>
+        <span class="anchor"><a href="#section-head-1">#</a></span>
+
+        <p>
+          När vi använder oss av <code>render_template()</code> så skickar vi
+          med en fil som vi vill rendera. Flask letar då efter filen i en
+          mappstruktur som i vårat fall ser ut såhär:
+        </p>
+
+        <!--prettier-ignore-->
+        <pre><code class="language-python">app.py
+templates/
+    exempel.html
+    form.html
+    index.html
+    template.html</code></pre>
+
+        <p>
+          Flask letar alltså efter en mapp som heter <code>templates</code> och
+          sedan letar den efter den fil vi frågar efter. Trotts att dessa filer
+          innehåller html och har .html som filändelse så skall de betraktas som
+          Jinja-filer! Flask kommer att rendera dessa filer, alltså läsa igeom
+          dem och ersätta Jinja-kod med riktig html-kod (och spara befintlig
+          html).
+        </p>
+        <span class="note"
+          >Jinja-filer har ingen egen filändelse. Dessa kan ha nästan vad som
+          helst. Du skulle kunna döpa dem <em>exempel.jinja</em> om du
+          vill</span
+        >
+        <h2 id="section-head-2">Skillnad på python och Jinja</h2>
+        <span class="anchor"><a href="#section-head-2">#</a></span>
+        <p>
+          Det finns vissa skillnader mellan Python och Jinja. Vi har redan sett
+          några av dem. Vi har till exempel sett att vi använder oss av
+          <code>{% %}</code> för att skriva kod i Jinja. Vi har också sett att
+          vi använder oss av <code>{{ }}</code> för att skriva ut variabler.
+        </p>
+
+        <span class="note"
+          >Du har nog även sett att jag använder mig av <code>{# #}</code> för
+          att kommentera i Jinja.<br />Men även
+          <code>&lt;!-- html-kommentar --&gt;</code> går bra!</span
+        >
+
+        <p>
+          Vi har även sett att vi använder oss av slutblock för att avsluta
+          kodblock. Detta gör vi med tex. <code>{% endblock %}</code> och {%
+          endif %}. Detta är något som vi inte gör i Python. Detta är för att
+          Jinja inte använder sig av indentering. Det fungerar mer som html och
+          använder slutblock, när ett block ska avslutas.
+        </p>
+        <h2 id="section-head-3">Variabler, listor och dictionaries</h2>
+        <span class="anchor"><a href="#section-head-3">#</a></span>
+        <p>
+          Vi har i tidigare exempel använt oss av variabler i Jinja. Vi har då
+          använt oss av <code>{{ variabel }}</code>. Detta är en variabel som vi
+          skickar med till Jinja från Python. Men vi kan också skicka med listor
+          och dictionaries. Vi kan då använda oss av <code>{% for %}</code> och
+          <code>{% if %}</code> för att loopa igenom listor och dictionaries.
+        </p>
+        <p>
+          Vi börjar med att skicka med en lista, som vi gjorde med variabeln i
+          tidigare kapitell:
+        </p>
+
+        <!--prettier-ignore-->
+        <pre><code class="language-python line-numbers">@app.route("/jinja_exempel")
+def jinja_exempel():
+    lista = ["Mattias", "Peter", "Sonja"]
+    return render_template("jinja_exempel.html", lista=lista)</code></pre>
+
+        <p>
+          Skapa en template-fil som heter <code>jinja_exempel.html</code> och
+          ser ut såhär:
+        </p>
+
+        <!--prettier-ignore-->
+        <pre><code class="language-jinja2 line-numbers">{% block content %}
+&lt;h1&gt;Jinja Exempel&lt;/h1&gt;
+&lt;ul&gt;
+    {% for namn in lista %}
+        &lt;li&gt;{{ namn }}&lt;/li&gt;
+    {% endfor %}
+&lt;/ul&gt;
+{% endblock %}</code></pre>
+
+        <p>
+          Vi skickar alltså med en lista som heter <code>lista</code> och
+          innehåller tre namn. Vi skapar sedan en <code>for</code>-loop som
+          loopar igenom listan och skriver ut varje namn i en <code>li</code>.
+        </p>
+        <p>
+          Vi kan även göra som vanligt i python och komma åt specifika index i
+          listan:
+        </p>
+
+        <!-- prettier--ignore -->
+        <pre><code class="language-jinja2 line-numbers">{% block content %}
+&lt;h1&gt;Jinja Exempel&lt;/h1&gt;
+&lt;ul&gt;
+    &lt;li&gt;{{ lista[0] }}&lt;/li&gt;
+    &lt;li&gt;{{ lista[1] }}&lt;/li&gt;
+    &lt;li&gt;{{ lista[2] }}&lt;/li&gt;
+&lt;/ul&gt;
+{% endblock %}</code></pre>
+
+        <p>
+          Vi kan även på samma sätt skicka med dictionaries. Antingen skapar du
+          en ny route eller tar du bort den befintliga routen:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers">@app.route("/jinja_exempel")
+def jinja_exempel():
+    dict = {
+      "Namn": "Mattias",
+      "Ålder": 35,
+      "Bor": "Norberg"
+    }
+    return render_template("jinja_exempel.html", dict=dict)</code></pre>
+
+        <p>
+          Vi skapar nu en ny eller raderar vår befintliga template-fil och
+          skriver det här i den filen:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2 line-numbers">{% block content %}
+&lt;h1&gt;Jinja Exempel&lt;/h1&gt;
+&lt;ul&gt;
+    {% for key, value in dict.items() %}
+        &lt;li&gt;{{ key }}: {{ value }}&lt;/li&gt;
+    {% endfor %}
+&lt;/ul&gt;
+{% endblock %}</code></pre>
+
+        <p>
+          Precis som med listor, så kan vi separera ut vissa värden direkt
+          istället för att loopa:
+        </p>
+
+        <!-- prettier-igoner-->
+        <pre><code class="language-jinja2 line-numbers">{% block content %}
+&lt;h1&gt;Jinja Exempel&lt;/h1&gt;
+&lt;ul&gt;
+    &lt;li&gt;Namn: {{ dict.namn }}&lt;/li&gt;
+    &lt;li&gt;Ålder: {{ dict.ålder }}&lt;/li&gt;
+    &lt;li&gt;Bor: {{ dict.bor }}&lt;/li&gt;
+&lt;/ul&gt;
+{% endblock %}</code></pre>
+        <p>
+          Här kan vi alltså ganska strukturerat få fram vår information, om vi
+          vet key-value (nyckelvärdet) det vill säga. Den här metoden är en
+          metod vi kommer att jobba med längre fram i kursen.
+        </p>
+      </article>
+      <section class="next">
+        <a href="flask-beginner-4.html">&larr; Föregående kapitel</a> -
+        <span class="disabled">Nästa kapitel</span>
+      </section>
+    </main>
+  </body>
+</html>
