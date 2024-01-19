@@ -182,48 +182,53 @@ def exempel(name="World"):
         name = name + " " + arg
 
     return render_template("exempel.html", your_name=name)</code></pre>
+
+        <p>
+          Skriver vi då <code>/exempel/Mattias?arg=Stjernström</code> i
+          sökvägen, så får vi, i det här exemplet:
+
+          <img
+            src="assets/hello-name-lastname.png"
+            alt="Flask route exempel 2"
+          />
+
+          Och skriver vi inget parameter, så får vi samma resultat som i vårt
+          gamla exempel. Alltså i det här fallet bara
+          <code>Hello Mattias!</code> eller <code>Hello World!</code> om vi inte
+          skriver något namn.
+        </p>
+        <h3>Vad är request.args?</h3>
+        <p>
+          <code>request.args</code> är inbyggd flask-funktion som skapar en
+          dictionary, den innehåller alla parameteren som skickas med i
+          sökvägen. Varje parameter är en "key-value"-par och vi kan alltså
+          hämta ut ett parameter genom att skriva
+          <code>request.args.get("arg")</code>. Vi kan även sätta ett
+          default-värde om vi vill. Vi kan alltså skriva
+          <code>request.args.get("arg", "")</code> för att sätta ett
+          default-värde till en tom sträng. Detta kommer att bli tydligare i
+          nästa avsnitt.
+        </p>
+
+        <h4>Parametrar i sökvägen</h4>
+        <p>
+          Vi kan alltså skicka med parametrar i sökvägen. Vi kan alltså skriva
+          <code>/exempel/Mattias?arg=Stjernström</code> i sökvägen. Vi kan även
+          skicka med flera parametrar. Vi kan alltså skriva
+          <code>/exempel/Mattias?arg=Stjernström&arg2=Stjernström</code> i
+          sökvägen. Vi kan alltså skicka med hur många parametrar som helst.
+        </p>
+        <p>
+          Ett frågetecken (<code>?</code>) används för att separera sökvägen
+          från parametrarna. Sedan använder vi ett likhetstecken
+          (<code>=</code>) för att separera nyckeln från värdet. Vi använder vi
+          ett "och"-tecken (<code>&</code>) för att separera parametrarna från
+          varandra.
+        </p>
       </article>
-
-      <p>
-        Skriver vi då <code>/exempel/Mattias?arg=Stjernström</code> i sökvägen,
-        så får vi, i det här exemplet:
-
-        <img src="assets/hello-name-lastname.png" alt="Flask route exempel 2" />
-
-        Och skriver vi inget parameter, så får vi samma resultat som i vårt
-        gamla exempel. Alltså i det här fallet bara
-        <code>Hello Mattias!</code> eller <code>Hello World!</code> om vi inte
-        skriver något namn.
-      </p>
-      <h3>Vad är request.args?</h3>
-      <p>
-        <code>request.args</code> är inbyggd flask-funktion som skapar en
-        dictionary, den innehåller alla parameteren som skickas med i sökvägen.
-        Varje parameter är en "key-value"-par och vi kan alltså hämta ut ett
-        parameter genom att skriva <code>request.args.get("arg")</code>. Vi kan
-        även sätta ett default-värde om vi vill. Vi kan alltså skriva
-        <code>request.args.get("arg", "")</code> för att sätta ett default-värde
-        till en tom sträng. Detta kommer att bli tydligare i nästa avsnitt.
-      </p>
-
-      <h4>Parametrar i sökvägen</h4>
-      <p>
-        Vi kan alltså skicka med parametrar i sökvägen. Vi kan alltså skriva
-        <code>/exempel/Mattias?arg=Stjernström</code> i sökvägen. Vi kan även
-        skicka med flera parametrar. Vi kan alltså skriva
-        <code>/exempel/Mattias?arg=Stjernström&arg2=Stjernström</code> i
-        sökvägen. Vi kan alltså skicka med hur många parametrar som helst.
-      </p>
-      <p>
-        Ett frågetecken (<code>?</code>) används för att separera sökvägen från
-        parametrarna. Sedan använder vi ett likhetstecken (<code>=</code>) för
-        att separera nyckeln från värdet. Vi använder vi ett "och"-tecken
-        (<code>&</code>) för att separera parametrarna från varandra.
-      </p>
-
       <section class="next">
-        <a href="flask-beginner-2.html">&larr; Föregående kapitel</a> -
-        <span class="disabled">Nästa kapitel &rarr;</span>
+        <a href="flask-beginner-3.html">&larr; Föregående kapitel</a> -
+        <a href="flask-beginner-5.html">Nästa kapitel &rarr;</a>
       </section>
     </main>
   </body>
