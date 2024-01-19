@@ -41,10 +41,186 @@
       <h3 class="subtitle">PVSPYH23 Edition</h3>
 
       <article>
-        <h2 id="section-head">Kapitel 4 - Parametrar</h2>
+        <h2 id="section-head">
+          Kapitel 4 - Variabler och Parametrar i sökvägar
+        </h2>
         <span class="anchor"><a href="#section-head">#</a></span>
-        <p></p>
+        <p>
+          Vi ska prata om sökvägar en stund till. Nämligen variabler och
+          paramterar i sökvägar. Det är alltså dynamiska sätt att skriva
+          sökvägar. Vi kommer alltså att göra våran applikation mer dynamisk!
+        </p>
+
+        <h2 id="section-1">Variabler i sökvägar</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+        <p>
+          Vi kommer att använda oss av vår <code>exempel</code>-fil och funktion
+          igen. Vi öppnar först <code>app.py</code> och tittar på vår funktion
+          <code>exempel()</code>. Som vi kommer att skicka en variabel till.
+        </p>
+        <p>
+          Tanken är att vi ska skicka en variabel som visar ditt namn. Så vi
+          börjar med att lägga till en variabel i vår funktion. Vi kallar den
+          för <code>name</code>. Vi börjar med att berätta för flask hur vi vill
+          att sökvägen ska se ut. Jag vill att den ska se ut såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python">@app.route("/exempel/&lt;name&gt;")</code></pre>
+        <p>Sedan gör du precis som vanligt i python:</p>
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python">def exempel(name): # Samma variabel-namn som dekoratören!</code></pre>
+
+        <p>
+          Nu vill vi skicka med variabeln till vår html-fil. Det gör vi genom
+          att skicka med den som ett parameter i <code>render_template()</code>.
+          Vi skriver alltså såhär:
+        </p>
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python">return render_template("exempel.html", your_name = name)</code></pre>
+
+        <p>
+          Nu har vi skickat med variabeln <code>name</code> till vår html-fil.
+          Nu kan vi använda den i vår html-fil. Vi skriver alltså såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-html"><code class="language-html">&lt;h1&gt;Hello {{ your_name }}!&lt;/h1&gt; &lt;!-- Ersätt texten "Exempel" --&gt; </code></pre>
+
+        <p>
+          Nu ska det gå att skriva mitt namn i sökfältet. Jag skriver alltså
+          <code>/example/Mattias</code> i sökfältet så får jag detta tillbaks:
+        </p>
+        <img src="assets/hello-name.png" alt="Flask route exempel 2" />
+        <span class="note">Variabler på detta sättet är Case Sensitive!</span>
+
+        <h2 id="section-2">Inga variabler i sökvägar</h2>
+        <span class="anchor"><a href="#section-2">#</a></span>
+        <p>
+          Vi har alltså instruerat flask att bara ta emot variabler i våran
+          sökväg. Skriver vi inget efter <code>/example/</code> så kommer inte
+          flask att hitta något som matchar sökvägen. Flask kommer alltså att ge
+          oss en 404-sida.
+        </p>
+        <p>
+          Vi kan dock ändra på detta. Vi kan göra så att flask tar emot sökvägar
+          utan variabler. Vi gör det genom att lägga till ett argument till vår
+          dekoratör. Vi lägger till <code>strict_slashes</code> och sätter det
+          till <code>False</code>. Det gör vi såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python line-numbers">@app.route("/exempel/", strict_slashes=False)
+@app.route("/exempel/&lt;name&gt;")
+def exempel(name="World"):
+    return render_template("exempel.html", your_name=name)</code></pre>
+
+        <h3>Kodsammanfattning</h3>
+        <p>
+          På <mark>rad 1</mark> så lägger vi till en route som inte tar någon
+          variabel. För att göra det möjligt att skriva både
+          <code>/exempel</code> och <code>/exempel/</code> (notera
+          snedstrecket), så sätter vi <code>strict_slashes</code> till
+          <code>False</code>, då detta är <code>True</code> som default. På
+          <mark>rad 2</mark> så lägger vi till en route som tar en variabel. På
+          <mark>rad 3</mark> så lägger vi till en default-variabel som heter
+          <code>World</code>, den fungerar som vanligt i python som en fallback,
+          utifall vi inte anger en variabel. Den kommer alltså visa "world" om
+          inget argument passas. På <mark>rad 4</mark> så skickar vi med
+          variabeln till vår html-fil som innan.
+        </p>
+
+        <h3>Alternativ</h3>
+        <p>
+          Sökvägar behöver inte sluta med variabler. Vi kan alltså skriva såhär
+          om vi vill:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python line-numbers">@app.route("/&lt;variabel&gt;/exempel")</code></pre>
+        <p>
+          Detta kan vara behändigt om vi vill ha ett specifikt schema på dina
+          sökägar. Vi kan även ha fler variabler i sökvägen:
+        </p>
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python line-numbers">@app.route("/&lt;variabel1&gt;/&lt;variabel2&gt;")</code></pre>
+
+        <h2 id="section-3">Parametrar i sökvägar</h2>
+        <span class="anchor"><a href="#section-3">#</a></span>
+        <p>
+          Vi kan även skicka med parametrar till våra sökvägar. Det gör vi genom
+          att ändra lite i vår dekoratör. Vi lägger till
+          <code>methods</code> och sätter det till en lista med metoder som vi
+          vill tillåta. Vi vill tillåta <code>GET</code> och <code>POST</code>.
+          Vi gör det såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python line-numbers">@app.route("/exempel/&lt;name&gt;", methods=["GET", "POST"])</code></pre>
+
+        <p>
+          Nu kan vi skicka med parametrar till vår funktion. För att ta emot en
+          parameter behöver vi dock importera <code>request</code> från flask
+          och sedan använda request för att ta emot parametern.
+        </p>
+
+        <p>
+          Sedan använder vi <code>request</code> för att ta emot parametern. Vi
+          gör det såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python line-numbers">from flask import request # Glöm inte att importera övriga dependencies också!
+...
+
+@app.route("/exempel/", strict_slashes=False)
+@app.route("/exempel/&lt;name&gt;", methods=["GET"])
+def exempel(name="World"):
+
+    arg = request.args.get("arg", "")
+    if arg:
+        name = name + " " + arg
+
+    return render_template("exempel.html", your_name=name)</code></pre>
       </article>
+
+      <p>
+        Skriver vi då <code>/exempel/Mattias?arg=Stjernström</code> i sökvägen,
+        så får vi, i det här exemplet:
+
+        <img src="assets/hello-name-lastname.png" alt="Flask route exempel 2" />
+
+        Och skriver vi inget parameter, så får vi samma resultat som i vårt
+        gamla exempel. Alltså i det här fallet bara
+        <code>Hello Mattias!</code> eller <code>Hello World!</code> om vi inte
+        skriver något namn.
+      </p>
+      <h3>Vad är request.args?</h3>
+      <p>
+        <code>request.args</code> är inbyggd flask-funktion som skapar en
+        dictionary, den innehåller alla parameteren som skickas med i sökvägen.
+        Varje parameter är en "key-value"-par och vi kan alltså hämta ut ett
+        parameter genom att skriva <code>request.args.get("arg")</code>. Vi kan
+        även sätta ett default-värde om vi vill. Vi kan alltså skriva
+        <code>request.args.get("arg", "")</code> för att sätta ett default-värde
+        till en tom sträng. Detta kommer att bli tydligare i nästa avsnitt.
+      </p>
+
+      <h4>Parametrar i sökvägen</h4>
+      <p>
+        Vi kan alltså skicka med parametrar i sökvägen. Vi kan alltså skriva
+        <code>/exempel/Mattias?arg=Stjernström</code> i sökvägen. Vi kan även
+        skicka med flera parametrar. Vi kan alltså skriva
+        <code>/exempel/Mattias?arg=Stjernström&arg2=Stjernström</code> i
+        sökvägen. Vi kan alltså skicka med hur många parametrar som helst.
+      </p>
+      <p>
+        Ett frågetecken (<code>?</code>) används för att separera sökvägen från
+        parametrarna. Sedan använder vi ett likhetstecken (<code>=</code>) för
+        att separera nyckeln från värdet. Vi använder vi ett "och"-tecken
+        (<code>&</code>) för att separera parametrarna från varandra.
+      </p>
+
       <section class="next">
         <a href="flask-beginner-2.html">&larr; Föregående kapitel</a> -
         <span class="disabled">Nästa kapitel &rarr;</span>
