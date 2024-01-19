@@ -41,11 +41,11 @@
       <h3 class="subtitle">PVSPYH23 Edition</h3>
 
       <article>
-        <h2 id="section-head">Kapitel 6 - Jinja2</h2>
+        <h2 id="section-head">Kapitel 6 - Jinja3</h2>
         <span class="anchor"><a href="#section-head">#</a></span>
         <p>
           Som jag har nämnt innan, så använder sig Flask av ett templating-språk
-          som heter Jinja2. Vi har fått kännt på det tidigare. I det här
+          som heter Jinja3. Vi har fått kännt på det tidigare. I det här
           kapitlet ska vi gå igenom lite vad som finns att tillgå i Jinja.
         </p>
         <h2 id="section-head-1">Render Template - Vad händer?</h2>
@@ -204,7 +204,67 @@ def jinja_exempel():
           vet key-value (nyckelvärdet) det vill säga. Den här metoden är en
           metod vi kommer att jobba med längre fram i kursen.
         </p>
+
+        <h2 id="section-4">Operatorer i Jinja</h2>
+        <span class="anchor"><a href="#section-4">#</a></span>
+        <p>
+          Precis som i python så kan vi använda oss av matematiska, jämförelse-
+          och logiska operatorer i Jinja. Vi kan till exempel skriva följande
+          kod:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2">{{ 13 * 2 }}</code></pre>
+
+        <p>
+          Detta kommer att skriva ut <code>26</code> i vår html. Men det går
+          även att göra som i python, till exempel utföra matematik på en
+          sträng, som är renderad till html-sidan:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2">{{ summa % 2 }}</code></pre>
+        <span class="note"
+          >Anta att summan är en siffra, som vi skickar med från python.</span
+        >
+        <p>
+          Vi använder alltså av samma operatorer som i python. Detta gäller även
+          jämförelser och logik (<code>==</code>, <code>!=</code> och
+          <code>and</code>, <code>or</code>). Även vissa andra operatorer som
+          <code>in</code>, <code>not in</code> och <code>is</code> fungerar.
+        </p>
+
+        <h2 class="section-head-5">Pythonfunktioner</h2>
+        <span class="anchor"><a href="#section-head-5">#</a></span>
+        <p>
+          Många pythonfunktioner fungerar även i Jinja. Men vissa fungerar lite
+          olika. Här får man googla om det man testat inte fungerar. Det finns
+          till exempel sätt att få stor bokstav. Men vi kan inte använda
+          <code>.capitalize()</code> som vi gör i python. Istället använder vi
+          oss av <code>| capitalize</code>:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2">{{ "mattias" | capitalize }}</code></pre>
+
+        <p>
+          Detta kommer att skriva ut <code>Mattias</code> i vår html. Det finns
+          även andra funktioner som vi kan använda oss av. Vi kan till exempel
+          använda oss av <code>| length</code> för att få längden på en lista
+          eller en sträng.
+          <a
+            href="https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-builtin-filters"
+            >Mer om det i Jinja3s dokumentation</a
+          >.
+        </p>
+        <p>
+          Dessa är det vi kommer att gå in på just nu. Jinja är väldigt kompext
+          och har många funktioner. Som till exempel Template Inheritance,
+          Autoescaping, Macros och Tests. Vi kanske stöter på det längre fram i
+          kursen.
+        </p>
       </article>
+
       <section class="next">
         <a href="flask-beginner-4.html">&larr; Föregående kapitel</a> -
         <span class="disabled">Nästa kapitel</span>

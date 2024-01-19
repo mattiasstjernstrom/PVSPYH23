@@ -96,7 +96,8 @@
         <p>
           Denna gång ändras inte sökvägen när vi skickar formuläret. Detta är
           för att vi inte har satt <code>action</code> i formuläret, vilket gör
-          att vi skickar formuläret till samma sökväg som vi är på. Vilket vi
+          att vi skickar formuläret till samma sökväg som vi är på och för att
+          vi använder metoden <code>POST</code> som är "hemlig". Vilket vi
           ville, eftersom vi har vår route som tar emot en POST-request på samma
           sökväg.
         </p>
@@ -192,7 +193,7 @@ def form():
 
       <section class="next">
         <a href="flask-beginner-4.html">&larr; Föregående kapitel</a> -
-        <span class="disabled">Nästa kapitel &rarr;</span>
+        <a href="jinja-beginner.html">Nästa kapitel &rarr;</a>
       </section>
     </main>
   </body>
