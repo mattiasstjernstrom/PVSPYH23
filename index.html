@@ -41,6 +41,14 @@
         top: 0.9em;
         position: relative;
       }
+      ul li ol {
+        margin: 0.75em 0;
+        padding: 0 1em;
+        list-style: decimal;
+      }
+      ul li ol li::before {
+        display: none;
+      }
       a,
       a:visited {
         color: #111;
@@ -58,6 +66,33 @@
         <a href="python-frameworks/flask-beginner.html"
           >Flask - Beginner Level</a
         >
+        <ol>
+          <li>
+            <a href="python-frameworks/flask-beginner-1.html"
+              >Kapitel 1 - Vad är Flask?</a
+            >
+          </li>
+          <li>
+            <a href="python-frameworks/flask-beginner-2.html"
+              >Kapitel 2 - Hello World</a
+            >
+          </li>
+          <li>
+            <a href="python-frameworks/flask-beginner-3.html"
+              >Kapitel 3 - Routing</a
+            >
+          </li>
+          <li>
+            <a href="python-frameworks/flask-beginner-4.html"
+              >Kapitel 4 - Templates</a
+            >
+          </li>
+          <li>
+            <a href="python-frameworks/flask-beginner-5.html"
+              >Kapitel 5 - Ta emot data från formulär</a
+            >
+          </li>
+        </ol>
       </li>
     </ul>
   </body>
