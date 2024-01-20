@@ -1,0 +1,6 @@
+<h1>Uppdatera användare</h1>
+<form action="/uppdatera/{{ user.id }}?_method=put" method="post">
+  <input type="text" name="name" value="{{ user.name }}" />
+  <input type="email" name="email" value="{{ user.email }}" />
+  <button type="submit">Uppdatera</button>
+</form>

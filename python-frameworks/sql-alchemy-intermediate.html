@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode"
+          />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">Kapitel 8 - SQLAlchemy: Sökfunktionen</h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>
+          I det här kapitlet ska vi göra en sökfunktion för våra användare. Vi
+          ska använda oss av SQLAlchemy för att söka i vår databas. Vi ska även
+          använda oss av Jinja för att visa upp våra resultat.
+        </p>
+        <p>
+          För tillfället så har vi bara en användare i vår databas (om du inte
+          la till fler i förra kapitlet). Vi ska lägga till fler användare för
+          att kunna testa vår sökfunktion. Vi ska därför göra en lite mer
+          avancerad version av vår <code>add_user</code> funktion.
+        </p>
+        <h2 id="section-1">Lägg till flera användare</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+
+        <p>
+          I förra kapitlet så gjorde vi en funktion som lade till en
+          exempel-användare. Det kallar man för att seeda. Detta kan man
+          manuellt göra i en databashanterare, eller från webbaplikationen. Men
+          vi vill ha 100 använder, så varför inte använda våra kunskaper i
+          Python för att göra det åt oss?
+        </p>
+        <p>
+          Vi kommer att börja med att göra om vår
+          <code>seed_data</code>-funktion. För att testa en applikation på ett
+          bra sätt, så är det fördelaktigt att ha lite olika testdata som ser
+          verklig ut, men är fake. Vi ska därför använda oss av en modul som
+          heter <code>faker</code>. Det är en modul som kan generera fakedata.
+        </p>
+        <p>
+          Vi börjar med att öppna vår gamla kod från förra kapitlet. Den hittar
+          du här:
+        </p>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/mattiasstjernstrom/PVSPYH23/tree/main/sql-alchemy-CRUD"
+              target="_blank"
+              >Hela koden hittar du på github!</a
+            >
+          </li>
+        </ul>
+        <p>
+          Vi börjar med att installera och importera <code>Faker</code> i vår
+          <code>app.py</code> fil:
+        </p>
+        <!-- prettier-ignore -->
+        <pre><code class="language-bash">pip install faker</code></pre>
+        <pre><code class="language-python">from faker import Faker</code></pre>
+
+        <p>
+          Ta sedan bort all kod i vår <code>seed_data()</code>-funktion. Vi
+          skapar sedan en instans av <code>Faker</code> och sparar den i en
+          variabel som vi kallar för <code>fk</code> i vår funktion:
+        </p>
+        <pre><code class="language-python line-numbers"># app.py ...
+def seed_data():
+    fk = Faker()
+# ...</code></pre>
+        <span class="note">
+          Jag väljer att kalla faker-instansen för <code>fk</code> för att det
+          är en vanlig förkortning för <code>faker</code> och skiljer sig från
+          eventuella variabler som skulle kunna heta faker.
+        </span>
+        <p>
+          Nu ska vi skapa en while-loop som körs 100 gånger. Vi ska sedan skapa
+          en ny användare för varje gång loopen körs. För att få trovärdiga
+          resultat så kommer vi alltså att använda oss av faker för att skapa en
+          ny användare varje gång.
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers"># app.py ...
+def seed_data():
+    fk = Faker()
+    iterations = 0
+
+    while iterations < 20:  # Vi börjar med 20
+        user = User(
+            name=fk.name(),
+            email=fk.email(),
+        )
+        db.session.add(user)
+        db.session.commit()
+        iterations += 1
+# ...</code></pre>
+        <span class="note">
+          Vi börjar med att seed 20, för att testa så det fungerar. Sedan kan vi
+          öka antalet när vi är nöjda med resultatet.
+        </span>
+        <p>Ta nu bort de gamla användarna och starta om flaskappen:</p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-bash">python app.py</code></pre>
+        <span class="note">
+          Det är viktigt att du tar bort och startar om, så att databasen fylls
+          på med nya användare!
+        </span>
+        <p>
+          Nu har vi skapat den enklaste av seed-funktioner. Men just nu behöver
+          vi inte mer.
+        </p>
+        <h2 id="section-2">Vi bygger sök</h2>
+        <span class="anchor"><a href="#section-2">#</a></span>
+
+        <p>
+          Nu ska vi skapa en sökfunktion. Vi ska använda oss av SQLAlchemy för
+          att söka i vår databas. Vi ska även använda oss av Jinja för att visa
+          upp våra resultat.
+        </p>
+        <p>
+          Jag tänker göra sökfunktionen överst i vår
+          <code>index.html</code>-fil. Men när vi söker kommer vi komma till en
+          separat sida, med resultaten. Vi börjar med att klistra in detta
+          överst i vår <code>index.html</code>-fil:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2 line-numbers">{# templates/index.html #}
+&lt;form&gt;
+    &lt;input type="text" name="search" placeholder="Sök efter användare"&gt;
+    &lt;button type="submit"&gt;Sök&lt;/button&gt;
+&lt;/form&gt;
+{# ... #}</code></pre>
+
+        <p>
+          Vi skapar sedan en ny route i vår <code>app.py</code>-fil. Vi kallar
+          den för <code>sok</code> och den ska ta emot en
+          <code>GET</code> request och returnera en JSON-fil med sökresultatet
+          för att testa om det fungerar. Så vi börjar med att importera
+          <code>jsonify</code> från <code>flask</code>:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-bash">from flask import jsonify</code></pre>
+
+        <p>
+          Vi skapar en variabel som heter <code>input</code> och sparar det som
+          vi får från vår <code>GET</code>-request i den. Vi returnerar sedan en
+          JSON-fil med det som vi får från vår <code>GET</code>-request:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers"># app.py ...
+@app.route("/sok", methods=["GET"])
+def sok():
+    input = request.args.get("q")
+    return jsonify({"q": input})
+# ...</code></pre>
+
+        <p>
+          Nu funkar det att skicka en input mellan två routes. Nu ska vi skapa
+          själva sökfunktionen. Vi börjar med att skapa en variabel som heter
+          <code>users</code> och sparar alla användare i den som vi gjorde när
+          vi listade alla användare. Efter det skapar vi en variabel som heter
+          <code>input</code> och sparar det som vi får från vår
+          <code>GET</code>-request i den.
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers"># app.py ...
+@app.route("/sok", methods=["GET"])
+def sok():
+    users = User.query.all()
+    input = request.args.get("q")
+
+    return jsonify({"q": input})
+# ...</code></pre>
+
+        <p>
+          Nu ska vi skapa en ny dictionary som vi kallar för
+          <code>results</code>. Vi ska sedan loopa igenom alla användare och
+          lägga till dem i vår dictionary. Vi ska använda oss av
+          <code>contains</code>-metoden för att söka efter användare som
+          innehåller det som vi skickar med i vår <code>GET</code>-request. Vi
+          ska sedan returnera vår <code>results</code>-dictionary som en
+          JSON-fil:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers"># app.py ...
+@app.route("/sok", methods=["GET"])
+def sok():
+    input = request.args.get("q")
+    users = User.query.filter(User.name.contains(input)).all()
+
+    results = [{"name": user.name, "email": user.email} for user in users]
+
+    return jsonify(results)
+# ...</code></pre>
+        <h3>Kodsammanfattning</h3>
+        <p>
+          På <mark>rad 5</mark> ber vi SQLAlchemy att flitrera ut resultat med
+          den inbyggda filterfunktionen. Vi specificerar till att vi vill ha
+          alla användare som innehåller det som vi skickar med i vår
+          <code>GET</code>-request. Vi sparar sedan alla användare i en variabel
+          som vi kallar för <code>users</code>. Vi loopar sedan genom resultatet
+          och lägger de till vår dictionary som sedan blir en json-fil med hjälp
+          av jsonify.
+        </p>
+
+        <h2 id="section-3">Söka i flera fält</h2>
+        <span class="anchor"><a href="#section-3">#</a></span>
+        <p>
+          Nu har vi en sökfunktion som returnerar alla användare som innehåller
+          det som vi skickar med i vår GET-request. Vi vill såklart kunna söka
+          alla igenom alla mail-adresser också. Vi vill alltså kombinera två
+          filter. Vi kan göra det med hjälp av
+          <code>or_</code>-metoden. Vi börjar med att importera den från
+          SQLAlchemy:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-bash">from sqlalchemy import or_</code></pre>
+
+        <p>
+          Vi kan nu använda oss av <code>or_</code>-metoden för att kombinera
+          två filter. Vi ändrar vår <code>filter</code>-metod till att se ut så
+          här:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers"># app.py ...
+@app.route("/sok", methods=["GET"])
+def sok():
+    input = request.args.get("q")
+
+    users = User.query.filter(
+        or_(User.name.contains(input), User.email.contains(input))
+    ).all()
+
+    results = [{"name": user.name, "email": user.email} for user in users]
+
+    return jsonify(results)
+# ...</code></pre>
+        <p>
+          Vi dubbelkollar så att den söker på både mail och namn, genom att leta
+          på ett sökord som borde finnas i båda, detta är bara för att
+          demonstrera att det fungerar. Det är inget du behöver göra:
+        </p>
+        <img src="assets/search-results-json.png" alt="Search Results Json" />
+        <span class="note">
+          Som vanligt så kan utseendet på din och min JSON-fil skilja sig åt.
+          Innehållet är det viktiga!
+        </span>
+
+        <p>
+          Nu när vi vet att vi kan söka på både namn och e-mail så kan vi göra
+          en webbsida som visar alla resultat. Vi skapar en sida som heter
+          <code>sok.html</code> i vår templates-mapp. Sedan skriver gör vi en
+          Jinja-kod som loopar igenom alla resultat och visar upp dem:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2 line-numbers">{# templates/sok.html #}
+&lt;h1&gt;Sökresultat&lt;/h1&gt;
+&lt;ul&gt;
+    {% for user in results %}
+    &lt;li&gt;
+        &lt;h2&gt;{{ user.name }}&lt;/h2&gt;
+        &lt;p&gt;{{ user.email }}&lt;/p&gt;
+    &lt;/li&gt;
+    {% endfor %}
+&lt;/ul&gt;</code></pre>
+
+        <p>
+          I våran route <code>/sok</code> så renderar vi en template istället
+          för att returnera en JSON-fil. Vi skickar även med listan "results"
+          som vi tidigare gjorde som en JSON-fil:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers"># app.py ...
+return render_template("sok.html", results=results)
+#... </code></pre>
+        <p>
+          Nu har vi skapat en sökfunktion i SQLAlchemy! Hela koden finner du på
+          github:
+        </p>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/mattiasstjernstrom/PVSPYH23/tree/main/sql-alchemy-Sökfunktionen"
+              target="_blank"
+              >Hela koden hittar du på github!</a
+            >
+          </li>
+        </ul>
+      </article>
+
+      <section class="next">
+        <a href="flask-beginner-4.html">&larr; Föregående kapitel</a> -
+        <span class="disabled">Nästa kapitel &rarr;</span>
+      </section>
+    </main>
+  </body>
+</html>

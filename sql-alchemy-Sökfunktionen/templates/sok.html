@@ -1,0 +1,10 @@
+{# templates/sok.html #}
+<h1>Sökresultat</h1>
+<ul>
+  {% for user in results %}
+  <li>
+    <h2>{{ user.name }}</h2>
+    <p>{{ user.email }}</p>
+  </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,26 @@
+{# exempel/index.html #}
+<form action="/sok">
+  <input type="text" name="q" placeholder="Sök efter användare" />
+  <button type="submit">Sök</button>
+</form>
+
+<h1>Alla användare</h1>
+<ul>
+  {% for user in users %}
+  <li>
+    {{ user.name }} - {{ user.email }} -
+    <a href="/uppdatera/{{ user.id }}">Uppdatera</a>
+    <form action="/?_method=delete" method="post">
+      <input type="hidden" name="id" value="{{ user.id }}" />
+      <button type="submit">Ta bort</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+
+<form action="/" method="POST">
+  <h2>Lägg till användare</h2>
+  <input type="text" name="name" placeholder="Namn" />
+  <input type="email" name="email" placeholder="Email" />
+  <button type="submit">Skicka</button>
+</form>
