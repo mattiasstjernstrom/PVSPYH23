@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode"
+          />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">Kapitel 7 - SQLAlchemy - CRUD</h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>
+          För att kunna spara vår data i en databas behöver vi använda oss av
+          ett bibliotek som heter SQLAlchemy. Detta biblioteket är ett Object
+          Relational Mapper (ORM) som låter oss skriva Python-kod för att skapa
+          och manipulera databaser. Detta är ett väldigt kraftfullt verktyg som
+          vi kommer att använda oss av i detta kapitel.
+        </p>
+        <h2 id="section-head-1">Innan vi börjar</h2>
+        <span class="anchor"><a href="#section-head-1">#</a></span>
+        <p>
+          Den här kursen kommer vi inte att gå igenom hur man skapar en databas.
+          Vi antar att den redan finns. Jag kommer använda mig av en
+          mySQL-databas. Man får använda vad man vill. Principen är nästan
+          densamma.
+        </p>
+        <p>
+          Vi kommer nu skapa ett tomt projekt. Så gör en ny mapp, eller ta bort
+          allt från förra kapitlet förutom din virutella miljö. Vi kommer att
+          att använda, som vi alltid bör göra när vi jobbar med python.
+        </p>
+        <h2 id="section-head-2">Börja använda SQLAlchemy</h2>
+        <span class="anchor"><a href="#section-head-2">#</a></span>
+        <p>
+          För att börja använda SQLAlchemy behöver vi installera det. Detta gör
+          vi genom att, i vår terminal, skriva:
+        </p>
+
+        <!-- prettier-ignore-->
+        <pre><code class="language-bash">pip install flask-sqlalchemy</code></pre>
+
+        <p>
+          Eftersom jag använder mig av en mySQL-databas behöver jag även en
+          connector. Detta gör jag genom att skriva:
+        </p>
+
+        <!-- prettier-ignore-->
+        <pre><code class="language-bash">pip install mysql-connector-python</code></pre>
+
+        <p>
+          Vi behöver inte importera mysql-connector. Vill man använda något
+          annat paket eller databas, så installerar man det här.
+        </p>
+        <p>
+          Nu när vi har installerat SQLAlchemy så kan vi börja använda det. Vi
+          börjar med att importera SQLAlchemy i vårt projekt. Detta gör vi genom
+          att i <code>app.py</code> skriva:
+        </p>
+
+        <!-- prettier-ignore-->
+        <pre><code class="language-python line-numbers">from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqlconnector://root:password@localhost:3306/flask_db"
+db = SQLAlchemy(app)</code></pre>
+
+        <p>
+          Vi börjar med att importera SQLAlchemy. Sedan skapar vi en instans av
+          SQLAlchemy som vi kallar för <code>db</code>. Vi skickar in vår app
+          som argument till SQLAlchemy. Detta gör att SQLAlchemy vet vilken app
+          som ska användas.
+        </p>
+        <p>
+          Vi antar att det finns en databas som heter <code>flask_db</code> på
+          localhost som är tom. Vi antar även att vi har en användare som heter
+          root och har lösenordet password. Har du valt något annat kan du ändra
+          i koden ovan.
+        </p>
+        <p>
+          Vi kommer nu att skapa en modell (en klass) för vår databas och vi
+          kommer att skapa en modell för en användare. Där vi kommer att spara
+          användarens namn och email:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers">class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+
+def create_user_table():
+    with app.app_context():
+        db.create_all()
+
+if __name__ == "__main__":
+    create_user_table()
+    app.run(debug=True)
+</code></pre>
+        <span class="note"
+          >Vi kommer att gå igenom vad saker och ting i SQLAlchemy betyder i
+          nästa kapitel</span
+        >
+
+        <h3>Kodsammanfattning</h3>
+        <p>
+          Vi skapar en klass som heter <code>User</code>. Vi ärver från
+          <code>db.Model</code>. Detta gör att SQLAlchemy vet att detta är en
+          modell för en databas. Vi skapar sedan två kolumner. En för namn och
+          en för email. Vi sätter även en primärnyckel på id. Detta gör att
+          varje användare får ett unikt id.
+        </p>
+        <p>
+          Vi skapar på <mark>rad 10</mark> en funktion som heter
+          <code>create_user_table</code>. Denna funktion kommer att skapa vår
+          databas. På <mark>rad 10</mark> skapar vi även en if-sats som kollar
+          om vi kör filen direkt eller om vi importerar den. Om vi kör filen
+          direkt så kommer vi att köra funktionen
+          <code>create_user_table</code> och sedan starta vår app.
+        </p>
+
+        <p>
+          Nu har vi skapat en modell för vår databas. Vi behöver nu skapa
+          databasen. Detta gör vi genom att i vår terminal skriva:
+        </p>
+
+        <!-- prettier-ignore-->
+        <pre><code class="language-bash">python app.py</code></pre>
+
+        <p>
+          Detta kommer att skapa en table i vår databas som heter
+          <code>flask_db</code> på localhost (I vår mySQL-databas). Vi kan nu
+          använda oss av vår databas.
+        </p>
+        <h2 id="section-head-3">Seeda databasen</h2>
+        <span class="anchor"><a href="#section-head-3">#</a></span>
+
+        <p>
+          En tom databas är inte så mycket för världen. Vi kommer börja med att
+          skapa (seeda) en användare och spara den i vår databas. Detta gör vi
+          genom att i <code>app.py</code> genom att göra en funktion som heter
+          <code>seed_data</code> och uppdaterar vår
+          <code>create_user_table</code> funktion:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers"># ...
+def create_user_table():
+    with app.app_context():
+        db.create_all()
+
+        if not User.query.first():
+            seed_data()
+
+# Här seedar vi in en användare i vår databas:
+def seed_data():
+    user = User(name="Mattias Stjernström", email="mail@mehow.se")
+
+    db.session.add(user)
+    db.session.commit()
+# ...
+</code></pre>
+
+        <p>
+          Det vi har gjort här nu, är att på <mark>rad 6</mark> så kollar vi om
+          det finns någon användare i vår databas. Om det inte finns någon
+          användare så kör vi funktionen <code>seed_data</code>. På
+          <mark>rad 10</mark> så skapar vi en funktion som heter
+          <code>seed_data</code>. I denna funktion så skapar vi en användare som
+          heter <em>Mattias Stjernström</em> och har mailen
+          <em>mail@mehow.se</em>.
+        </p>
+        <p>
+          På <mark>rad 13 och 14</mark> lägger till användaren i vår databas och
+          sparar den. Vi kommer gå igenom lite syntax senare.
+        </p>
+
+        <p>
+          Nu har vi gjort en fake-post med mitt (eller ditt) namn och mail. Nu
+          vill vi kunna se vår användare, och se om allt gick korrekt till. Vi
+          skapar en index-route, som första kapitlet och i den skriver vi ut
+          alla användare i vår databas, först måste vi importera jsonify:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python">from flask import Flask, jsonify</code></pre>
+        <p>
+          Nu kan vi skriva ut alla användare i vår databas. Detta gör vi genom
+          att skriva:
+        </p>
+        <pre><code class="language-python line-numbers">@app.route("/")
+def index():
+    users = User.query.all()
+    return jsonify([{"namn": user.name, "email": user.email} for user in users])</code></pre>
+
+        <p>
+          Nu kan vi gå till <code>localhost:5000</code> och se vår användare i
+          en JSON-fil. Bara för att bekräfta att allt fungerar som det ska. Det
+          är lite svårt att debugga i flask, så detta är nog det snabbaste
+          sättet att ta reda på att vi har rätt data i vår databas. Man skulle
+          också kunna använda sig av <code>print()</code> för att se vad som
+          händer i koden. Men eftersom flask lyssnar på förfrågningar så är det
+          lite svårt att se vad som händer. Ett annat alternativ är att använda
+          sig av en databasvisualiserare typ Dbeaver och kolla så att datan
+          hamnat på rätt plats.
+        </p>
+
+        <p>
+          I nästa stycke så kommer vi ta fram datan visuellt som en webbsida i
+          webbläsaren. Men först delar jag med mig av koden i sin helhet, så man
+          kan se vad som har hänt:
+        </p>
+
+        <h3>Hela koden i <code>app.py:</code></h3>
+        <pre
+          style="height: 300px; overflow-y: scroll"
+        ><code class="language-python line-numbers">from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = "mysql+mysqlconnector://root:password@localhost:3306/flask_db"
+db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+
+
+def create_user_table():
+    with app.app_context():
+        db.create_all()
+
+        if not User.query.first():
+            seed_data()
+
+
+def seed_data():
+    user = User(name="Mattias Stjernström", email="mail@mehow.se")
+
+    db.session.add(user)
+    db.session.commit()
+
+
+@app.route("/")
+def index():
+    users = User.query.all()
+    return jsonify([{"namn": user.name, "email": user.email} for user in users])
+
+
+if __name__ == "__main__":
+    create_user_table()
+    app.run(debug=True)</code></pre>
+
+        <h2 id="section-head-4">Visa på webben</h2>
+        <span class="anchor"><a href="#section-head-4">#</a></span>
+        <p>
+          Nu när vi vet att vår data finns i vår databas så kan vi börja visa
+          den på webben. Vi kommer såklart att använda oss av Jinja för att visa
+          vår data. Vi kommer att göra genom att ändra i index-routen igen,
+          såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers">@app.route("/")
+def index():
+    users = User.query.all()
+    return render_template("index.html", users=users)</code></pre>
+
+        <h3>Kodsammanfattning</h3>
+        <p>
+          På <mark>rad 3</mark>, så har vi alltså. Åter igen en funktion från
+          SQLAlchemy. Jag har inte förklarat den än. Jag tycker det är viktigare
+          att få det att fungera som det ska först. Nu när det börjar lite mer
+          komplext. Det som händer är i alla fall att vi hämtar alla användare
+          från vår databas. Vi anropar klassen <code>User</code> från våran app
+          och funktionerna som heter <code>query</code> och
+          <code>all()</code> från SQLAlchemy. Dessa tillsammans gör att vi
+          hämtar alla användare från vår databas.
+        </p>
+        <p>
+          Nu ska vi skapa en template som heter <code>index.html</code>. Detta
+          har vi gått igenom tidigare. Väl inne i vår template så kan vi skriva
+          ut vår data. Detta gör vi genom att skriva:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2 line-numbers">&lt;h1&gt;Alla användare&lt;/h1&gt;
+&lt;ul&gt;
+    {% for user in users %}
+        &lt;li&gt;{{ user.name }} - {{ user.email }}&lt;/li&gt;
+    {% endfor %}
+&lt;/ul&gt;</code></pre>
+
+        <p>
+          Här kommer det att skrivas ut alla användare i vår databas med en
+          for-loop, som vi såg i tidigare exempel. Precis som vi skulle gjort i
+          python. Nu kan vi gå till <code>127.0.0.1:5000</code> och se vår
+          lista, nåja. En användare i vår databas.
+        </p>
+        <h2 id="section-head-5">Lägg till användare</h2>
+        <span class="anchor"><a href="#section-head-5">#</a></span>
+        <p>
+          Nu när vi kan visa vår data så vill vi också kunna lägga till en
+          användare. Vi kommer att göra detta i samma route, för simpelhetens
+          skull. Vi anänder oss av POST-metoden, inte helt långt ifrån den vi
+          lärde oss tidigare:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python">from flask import Request</code></pre>
+        <span class="note">Glöm inte att importera request</span>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers">@app.route("/", methods=["GET", "POST"])
+def index():
+    users = User.query.all()
+
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+
+        user = User(name=name, email=email)
+
+        db.session.add(user)
+        db.session.commit()
+
+    return render_template("index.html", users=users)</code></pre>
+
+        <span class="note"
+          >Notera att vi måste ha både GET och POST i denna route</span
+        >
+        <p>
+          Vi kommer också behöva ändra i vår template <code>index.html</code>.
+          Vi kommer att lägga till ett formulär som vi kan skicka in vår data
+          med. Detta gör vi genom att skriva:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2 line-numbers">{# ... #}
+&lt;form action="/" method="POST"&gt;
+  &lt;h2&gt;Lägg till användare&lt;/h2&gt;
+  &lt;input type="text" name="name" placeholder="Namn" /&gt;
+  &lt;input type="email" name="email" placeholder="Email" /&gt;
+  &lt;button type="submit"&gt;Skicka&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+        <p>
+          Men här stöter vi på ett vanligt problem med flask. Nu bör det gå att
+          lägga till en användare. Men, sidan uppdateras, och den nya användaren
+          som vi har lagt till - syns inte till. Vi måste ladda om sidan igen
+          för att se den. Detta är på grund av att vi inte uppdaterar vår
+          <code>users</code>-variabel EFTER att vi har lagt till den.
+        </p>
+        <p>
+          Det här problemet får vi för att <code>Users.query.all()</code> bara
+          körs en gång per request från webbläsaren och vi har ju anropat
+          funktionen databas-modellen INNAN if-satsen och då får vi ju inte med
+          den nya användaren i vår lista.
+          <strong>Glöm inte att det är pythonkod.</strong>
+          Variabeln "users" innehåller ju all data som vi har hämtat från vår
+          databas, den är inte dynamisk. Vi måste alltså hämta om datan från
+          databasen efter att vi har lagt till en användare.
+        </p>
+        <p>
+          Vi flyttar alltså vår kod som hämtar alla användare till efter
+          if-satsen:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers">@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+
+        user = User(name=name, email=email)
+
+        db.session.add(user)
+        db.session.commit()
+
+    users = User.query.all() # Flyttar hit
+
+    return render_template("index.html", users=users)</code></pre>
+
+        <p>
+          Nu fungerar det som det ska. Vi kan lägga till en användare och den
+          visas i listan på sidan.
+        </p>
+
+        <h2 id="section-head-6">Ta bort användare</h2>
+        <span class="anchor"><a href="#section-head-6">#</a></span>
+
+        <p>
+          Nu när vi kan lägga till en användare så vill vi också kunna ta bort
+          en användare. Vi kommer att göra detta genom att lägga till en knapp i
+          vår template. Vi kommer att lägga till en knapp som heter "Ta bort"
+          och när vi klickar på den så kommer vi att ta bort användaren. Vi
+          kommer att använda oss av en POST-metod för att ta bort användaren.
+          Detta gör vi genom att skriva:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2 line-numbers">{# exempel/index.html #}
+&lt;h1&gt;Alla användare&lt;/h1&gt;
+&lt;ul&gt;
+  {% for user in users %}
+    &lt;li&gt;
+      {{ user.name }} - {{ user.email }}
+      &lt;form action="/?_method=delete" method="post"&gt;
+        &lt;input type="hidden" name="id" value="{{ user.id }}" /&gt;
+        &lt;button type="submit"&gt;Ta bort&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/li&gt;
+  {% endfor %}
+&lt;/ul&gt;
+{# ... #}</code></pre>
+
+        <p>
+          POST-metoden som action använder vi för att det är säkrare att ta bort
+          med en osynlig länk, än att ha en länk i sökvägen som vi faktiskt kan
+          skriva. Detta, för att undvika att någon annan tar bort vår data med
+          en enkel länk.
+        </p>
+
+        <p>
+          Vi kommer ändå den här gången använda oss av en query-parameter för
+          utföra borttagningen, detta för att vi inte kan skicka med en DELETE i
+          en form. Vi kommer att använda oss av en query-parameter som heter
+          <code>_method</code>. I <code>app.py</code> skriver vi såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers">@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST" and request.args.get("_method") == "delete":
+        id = request.form["id"]
+        user = User.query.filter_by(id=id).first()
+        db.session.delete(user)
+        db.session.commit()
+
+    elif request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+
+        user = User(name=name, email=email)
+
+        db.session.add(user)
+        db.session.commit()
+# ...</code></pre>
+
+        <p>
+          Detta gör vi endast för att bara använda en route. Vi skulle lika
+          gärna kunna göra en egen route för varje beteende och då inte behöva
+          en query-parameter. Men den här gången gör vi såhär för att
+          demomnstrera att det går att göra på flera sätt.
+        </p>
+
+        <h2 id="section-head-7">Uppdatera användare</h2>
+        <span class="anchor"><a href="#section-head-7">#</a></span>
+
+        <p>
+          Nu har vi bara en sak kvar för att göra en fullständing
+          CRUD-applikation; Uppdatera en användare. Vi kommer att behöva en
+          annan metod för att uppdatera vår användare, det gör vi genom en länk:
+        </p>
+
+        <pre><code class="language-jinja2 line-numbers">{# exempel/index.html #} ...
+{{ user.name }} - {{ user.email }} - &lt;a href="/uppdatera/{{ user.id }}"&gt;Uppdatera&lt;/a&gt;
+{# ... #}</code></pre>
+
+        <p>
+          Nu har vi en länk som heter "Uppdatera" och en knapp som heter "Ta
+          bort".
+        </p>
+        <!-- !uppdatera sida-->
+        <p>
+          Nu kommer vi göra en route som heter
+          <code>/uppdatera/&lt;id&gt;</code>.
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python">from flask import redirect</code></pre>
+        <span class="note">Glöm inte att importera redirect</span>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-python line-numbers"># ...
+@app.route("/uppdatera/&lt;id&gt;", methods=["GET", "POST"])
+def uppdatera(id):
+    user = User.query.filter_by(id=id).first()
+    if request.method == "POST" and request.args.get("_method") == "put":
+        name = request.form["name"]
+        email = request.form["email"]
+
+        user.name = name
+        user.email = email
+
+        db.session.commit()
+        return redirect("/")
+    return render_template("uppdatera.html", user=user)
+# ...</code></pre>
+
+        <p>
+          Och så måste vi göra en helt ny template, vid namn
+          <code>uppdatera.html</code>:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre><code class="language-jinja2 line-numbers">&lt;h1&gt;Uppdatera användare&lt;/h1&gt;
+&lt;form action="/uppdatera/{{ user.id }}?_method=put" method="post"&gt;
+  &lt;input type="text" name="name" value="{{ user.name }}" /&gt;
+  &lt;input type="email" name="email" value="{{ user.email }}" /&gt;
+  &lt;button type="submit"&gt;Uppdatera&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+        <p>
+          Nu har vi en fullständig CRUD-applikation. Vi kan lägga till, ta bort
+          och uppdatera en användare. Vi kan också visa alla användare i vår
+          databas.
+        </p>
+        <p>
+          I nästa kapitel så kommer vi att gå igenom hur vi kan använda oss av
+          SQLAlchemy för att söka i databasen.
+        </p>
+      </article>
+
+      <section class="next">
+        <a href="flask-beginner-4.html">&larr; Föregående kapitel</a> -
+        <span class="disabled">Nästa kapitel</span>
+      </section>
+    </main>
+  </body>
+</html>
