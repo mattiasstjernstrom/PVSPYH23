@@ -41,13 +41,298 @@
       <h3 class="subtitle">PVSPYH23 Edition</h3>
 
       <article>
-        <h2 id="section-head">Kapitel 8 - SQLAlchemy: Paginering</h2>
+        <h2 id="section-head">Kapitel 8 - Paginering och sortering</h2>
         <span class="anchor"><a href="#section-head">#</a></span>
-        <p></p>
+        <p>
+          Att dela upp innehållet i mindre delar och att kunna sortera det är
+          något som är väldigt vanligt i webbutveckling. Det är också något som
+          SQLAlchemy har inbyggt. Vi ska titta på hur vi kan använda oss av det
+          i det här kapitlet.
+        </p>
+        <p>
+          Det är inte bara användbart för att dela upp resultatet i mindre
+          delar, det är också bra för serverbelastningen. Om vi har en
+          sökfunktion som returnerar 5000 resultat, så är det inte så
+          användarvänligt att visa alla resultat på en gång. Det är också
+          väldigt tungt för servern att skicka tillbaks så mycket data. Därför
+          är det bra att dela upp resultatet i mindre delar och att användaren
+          kan bläddra mellan sidorna.
+        </p>
+
+        <h2 id="section-1">Paginering</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+        <p>
+          Paginering är en funktion som delar upp resultatet i mindre delar och
+          visar bara en del i taget. Detta gör att vi kan visa tex 10 användare
+          åt gången och användaren kan sedan bläddra mellan sidorna och detta
+          har såklart SQLAlchemy inbyggt. Vi kommer att fortsätta använda vår
+          gamla kod, från det tidigare kapitlet:
+        </p>
+
         <ul>
           <li>
             <a
-              href="https://github.com/mattiasstjernstrom/PVSPYH23/tree/main/sql-alchemy-Pagination"
+              href="https://github.com/mattiasstjernstrom/PVSPYH23/tree/main/sql-alchemy-Sökfunktionen"
+              target="_blank"
+              >Hela koden hittar du på github!</a
+            >
+          </li>
+        </ul>
+
+        <p>
+          För att börja använda paginering behöver vi importera en ny modul:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python">from flask_sqlalchemy import Pagination</code></pre>
+
+        <p>
+          Vi behöver också lägga till en ny parameter i vår sökfunktion, som
+          heter <code>page</code>. Detta är den sida som användaren är på. Nu
+          kommer en till synes ganska avancerad kod. Men vi går igenom den
+          tillsammans efter kodblocken eftersom den är svår att dela upp:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python line-numbers"><code class="language-python">from flask import url_for, redirect</code></pre>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python line-numbers"><code class="language-python"># app.py ...
+@app.route("/sok", methods=["GET"])
+def sok():
+    page = request.args.get("page", 1, type=int)
+    per_page = 10
+    input = request.args.get("q")
+
+    users_query = User.query.filter(
+        or_(User.name.contains(input), User.email.contains(input))
+    )
+
+    users_pagination = users_query.paginate(
+        page=page, per_page=per_page, error_out=False
+    )
+    users = users_pagination.items
+
+    next_url = (
+        url_for("sok", page=users_pagination.next_num)
+        if users_pagination.has_next
+        else None
+    )
+    prev_url = (
+        url_for("sok", page=users_pagination.prev_num)
+        if users_pagination.has_prev
+        else None
+    )
+
+    return render_template(
+        "sok.html", results=users, next_url=next_url, prev_url=prev_url
+    )
+# ...</code></pre>
+
+        <h3>Kodsammanfattning</h3>
+        <p>
+          Vi börjar (på <mark>rad 4</mark>) med att skapa en variabel som heter
+          <code>page</code>. Här använder vi <code>request.args.get()</code> för
+          att hämta värdet från sökfältet. Som type, måste vi ha
+          <code>int</code> för att tala om att det ska vara en siffra, annars
+          vill den ha en sträng. Om det inte finns något värde i sökfältet så
+          sätter vi värdet till 1. Vi vill ju alltid börja på sidan ett!
+        </p>
+        <p>
+          Vi skapar också en variabel som heter <code>per_page</code>. Detta är
+          antalet resultat som vi vill visa per sida. Vi skapar vi en sökfråga
+          med <code>filter()</code> och <code>or_()</code>. Vi söker efter
+          användare som innehåller <code>input</code> i namnet eller i eposten.
+          Precis som i förra exemplet.
+        </p>
+        <p>
+          Om <code>input</code> är tom så skickar vi tillbaks användaren till
+          index, där sökfältet är placerat. Det är inte så användarvänligt eller
+          bra för serverbelastningen att lista till exempel alla användare i
+          databasen.
+        </p>
+        <p>
+          På <mark>rad 12</mark> skapar vi en variabel som heter
+          <code>users_pagination</code>. Här använder vi
+          <code>users_query</code> som vi skapade på rad 8. Vi använder
+          funktionen <code>paginate()</code> för att dela upp resultatet i
+          mindre delar. Här använder vi <code>page</code> som vi skapade på rad
+          4, <code>per_page</code> som vi skapade på rad 5.
+        </p>
+
+        <p>
+          På <mark>rad 17 och 22</mark> skapar vi två variabler som heter
+          <code>next_url</code> och <code>prev_url</code>. Dessa är länkar som
+          vi kommer att använda för att bläddra mellan sidorna. Vi använder
+          <code>url_for()</code> för att skapa länkarna, det är en funktion från
+          flask som skapar länkar till olika sidor och tillåter oss att skicka
+          med variabler i det här fallet <code>(page=2 osv)</code>. Vi också
+          skickar med <code>page</code> som vi skapade på rad 4 och
+          <code>users_pagination.next_num</code> och
+          <code>users_pagination.prev_num</code> som är SQLAlchemy's egna
+          funktioner för att hitta nästa och föregående sida.
+        </p>
+        <p>
+          Till sist så skickar vi med allt till render_template som vi behöver
+          för att kunna visa resultat och att byta sida fram och tillbaks.
+        </p>
+
+        <h3>Adressen i sökfältet då?</h3>
+        Om du går fram och tillbaks mellan sidorna nu så kommer du att se att
+        orginal-queryn kommer att försvinna. Det ordnar vi lätt genom att lägga
+        till ett par ändringar i <code>url_for</code>:
+
+        <!-- prettier-ignore -->
+        <pre class="language-python line-numbers"><code class="language-python"># app.py ...
+next_url = url_for('sok', q=input, page=users_pagination.next_num) \
+    if users_pagination.has_next else None
+prev_url = url_for('sok', q=input, page=users_pagination.prev_num) \
+    if users_pagination.has_prev else None
+# ...</code></pre>
+        <h3>Kodsammanfattning</h3>
+        <p>
+          Det vi gör här är helt enkelt att vi använder oss av
+          <code>url_for</code>s möjlighet att skicka med flera parametrar. Vi
+          skickar med <code>q</code> som är sökfråga och variabeln vi använder
+          är <code>input</code> som vi skapade på rad 6 i det förra exemplet.
+          Och vi använder samma query-namn som vi skapade när vi skapade
+          sökfältet i <code>index.html</code>. Alltså <code>q</code>. Nu syns
+          det i URL-en vad vi sökte på när vi hoppar mellan sidorna. Det här kan
+          anses som standard när man använder sök och paginering.
+        </p>
+
+        <h2 id="section-2">Sortering</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+
+        <p>
+          I det här exemplet kan det vara lite onödigt att göra en sortering.
+          Men ibland kan det vara smidigt att kunna sortera resultatet. Så jag
+          tänker att vi ska kunna sortera sök-resultaten i alfabetisk ordning.
+          Vi börjar med att lägga till en ny parameter i sökfunktionen som heter
+          <code>sort</code>. Vi behöver också lägga till en ny import:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code class="language-python">from sqlalchemy import asc, desc</code></pre>
+
+        <p>
+          Vi behöver också lägga till en ny parameter i sökfunktionen som heter
+          <code>sort</code> och sedan kan vi lägga till en ny if-sats som ser ut
+          såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python line-numbers"><code class="language-python"># app.py ...
+sort = request.args.get("sort")
+
+if sort == "name_asc":
+    users_query = users_query.order_by(asc(User.name))
+elif sort == "name_desc":
+    users_query = users_query.order_by(desc(User.name))
+elif sort == "email_asc":
+    users_query = users_query.order_by(asc(User.email))
+elif sort == "email_desc":
+    users_query = users_query.order_by(desc(User.email))
+# ...</code></pre>
+        <span class="note"
+          >Kom ihåg att lägga dessa rader någonstans mellan
+          <code>if input</code>-satsen och <code>next_url</code>-variabeln</span
+        >
+
+        <h3>Kodsammanfattning</h3>
+        <p>
+          Det vi behöver göra här är att vi behöver skapa en ny variabel som
+          heter <code>sort</code> för att kunna ta in värdet från sökfältet.
+          Sedan skapar vi en if-sats som kollar om <code>sort</code> är lika med
+          något av alternativen. Om det är det så skapar vi en ny sökfråga mot
+          databasen, med nya premisser. För det använder vi
+          <code>order_by()</code> för att sortera upp resultatet. Vi använder
+          <code>asc()</code> för att sortera i stigande ordning och
+          <code>desc()</code> för att sortera i fallande ordning. Jag har valt
+          att använda både <code>name</code> och <code>email</code> i det här
+          exemplet.
+        </p>
+
+        <p>
+          Nu kan vi manuellt skriva till exempel
+          <code>/sok?q=example&sort=email_desc</code> för att sortera resultaten
+          efter fallande ordning på användarnas email-adresser.
+        </p>
+
+        <p>
+          Vi vill ju så klart kunna göra det med ett klick på vår webbsida, så
+          vi skriver till en liten kod-snutt i <code>sok.html</code> och ett
+          tillägg i <code>app.py</code>:
+        </p>
+        <pre class="language-python line-numbers"><code># ...
+return render_template(
+    "sok.html",
+    q=input, # Ny rad
+    current_page=page, # Ny rad
+    results=users,
+    next_url=next_url,
+    prev_url=prev_url,
+)
+#... </code></pre>
+
+        <p>
+          Så enkelt fixar vi sorteringen i python. Nu kan vi skriva en liten
+          kod-snutt i
+          <code>sok.html</code> för att skapa länkar som sorterar resultatet:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-jinja2 line-numbers"><code>{# templates/sok.html #}
+&lt;div class="sort"&gt;
+    &lt;h3&gt;Sortera efter:&lt;/h3&gt;
+    &lt;a href="{{ url_for('sok', input=q, sort='name_asc', page=current_page) }}"&gt;Namn A-Ö&lt;/a&gt;
+    &lt;a href="{{ url_for('sok', input=q, sort='name_desc', page=current_page) }}"&gt;Namn Ö-A&lt;/a&gt;
+    &lt;a href="{{ url_for('sok', input=q, sort='email_asc', page=current_page) }}"&gt;Email A-Ö&lt;/a&gt;
+    &lt;a href="{{ url_for('sok', input=q, sort='email_desc', page=current_page) }}"&gt;Email Ö-A&lt;/a&gt;
+&lt;/div&gt;
+{# ... #}</code></pre>
+        <span class="note"
+          >Ha som vana att använda <code>url_for()</code> i flask. Med dynamiska
+          subfolders ställer det snabbt till problem!</span
+        >
+        <h2 id="section-3">Vad händer under huven? (överkurs)</h2>
+        <span class="anchor"><a href="#section-3">#</a></span>
+        <p>
+          Som en liten bonus så tänkte jag att vi skulle kolla lite på hur
+          SQLAlchemy skapar SQL-querys. Det är ju trots allt det som är en av
+          anledningarna till att vi använder oss av ett ORM som SQLAlchemy. Vi
+          kan skriva ut våra querys med hjälp av
+          <code>print()</code> precis som i python, men eftersom flask är ett
+          webb-ramverk och körs hela tiden, så fungerar det inte att skriva ut i
+          terminalen. Vi behöver skriva ut det i flask-konsolen. Det gör vi
+          genom att öppna en ny terminal i samma mapp och skriva
+          <code>flask shell</code>. Då öppnas en interaktiv python-shell med din
+          app inladdad. Vi kan skriva ut querys genom att skriva såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python"><code>>>> from sqlalchemy import or_
+>>> users_query = User.query.filter(or_(User.name.contains(input), User.email.contains(input)))
+>>> print(users_query)
+</code></pre>
+
+        <p>Resultatet av denna query blir:</p>
+        <!-- prettier-ignore -->
+        <pre class="language-sql"><code class="language-sql">SELECT user.id AS user_id, user.name AS user_name, user.email AS user_email 
+    FROM user 
+    WHERE (user.name LIKE concat('%', %(name_1)s, '%')) OR (user.email LIKE concat('%', %(email_1)s, '%'))
+        </code></pre>
+        <p>Ganska skönt att slippa skriva den själv va?</p>
+
+        <p>
+          Nu har vi bara en sak kvar att lära om SQLAlchemy för denna gång, det
+          förtjänar ett eget kapitel. Migrations. Ses där! 🤓
+        </p>
+
+        <ul>
+          <li>
+            <a
+              href="https://github.com/mattiasstjernstrom/PVSPYH23/tree/main/sql-alchemy-PageSort"
               target="_blank"
               >Hela koden hittar du på github!</a
             >
