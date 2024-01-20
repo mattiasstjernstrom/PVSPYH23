@@ -491,7 +491,7 @@ def index():
           Detta gör vi endast för att bara använda en route. Vi skulle lika
           gärna kunna göra en egen route för varje beteende och då inte behöva
           en query-parameter. Men den här gången gör vi såhär för att
-          demomnstrera att det går att göra på flera sätt.
+          demonstrera att det går att göra på flera sätt.
         </p>
 
         <h2 id="section-head-7">Uppdatera användare</h2>
@@ -533,7 +533,7 @@ def uppdatera(id):
         user.email = email
 
         db.session.commit()
-        return redirect("/")
+        return redirect("/") # Skickar tillbaka till användaren till index
     return render_template("uppdatera.html", user=user)
 # ...</code></pre>
 
@@ -552,7 +552,7 @@ def uppdatera(id):
 
         <p>
           Nu har vi en fullständig CRUD-applikation. Vi kan lägga till, ta bort
-          och uppdatera en användare. Vi kan också visa alla användare i vår
+          och uppdatera en användare. Där vi kan också visa alla användare i vår
           databas.
         </p>
         <ul>
