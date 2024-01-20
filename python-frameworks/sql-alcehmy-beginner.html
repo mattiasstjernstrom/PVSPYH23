@@ -99,8 +99,9 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqlconnector://root:password@localhost:3306/flask_db"
 db = SQLAlchemy(app)</code></pre>
 
+        <h3>Kodsammanfattning</h3>
         <p>
-          Vi börjar med att importera SQLAlchemy. Sedan skapar vi en instans av
+          Vi måste först importera SQLAlchemy. Sedan skapar vi en instans av
           SQLAlchemy som vi kallar för <code>db</code>. Vi skickar in vår app
           som argument till SQLAlchemy. Detta gör att SQLAlchemy vet vilken app
           som ska användas.
@@ -145,7 +146,7 @@ if __name__ == "__main__":
           varje användare får ett unikt id.
         </p>
         <p>
-          Vi skapar på <mark>rad 10</mark> en funktion som heter
+          Vi skapar på <mark>rad 6</mark> en funktion som heter
           <code>create_user_table</code>. Denna funktion kommer att skapa vår
           databas. På <mark>rad 10</mark> skapar vi även en if-sats som kollar
           om vi kör filen direkt eller om vi importerar den. Om vi kör filen
