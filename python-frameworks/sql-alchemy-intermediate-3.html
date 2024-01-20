@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode"
+          />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">Kapitel 9 - SQLAlchemy: Migrations</h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>Hantera databasversioner smidigt och effektivt med migrations.</p>
+        <p>
+          I den här kursen kommer vi att använda oss av ett verktyg som heter
+          Flask-Migrate. Flask-Migrate är ett verktyg som bygger på ett annat
+          verktyg som heter Alembic. Alembic är ett migrationsverktyg som
+          skapades av skaparna av SQLAlchemy. Flask-Migrate är ett verktyg som
+          bygger på Alembic och gör det enklare att använda migrations i Flask.
+        </p>
+
+        <h2 id="section-1">Vad är Migrate?</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+        <p>
+          Migrate är ett verktyg som gör det enkelt att hantera databasversioner
+          i Flask. Alltså att skapa, ändra och ta bort tabeller och kolumner i
+          databasen. Med olika versioner av databasen så kan vi enkelt
+          återställa databasen till en tidigare version om vi skulle behöva det.
+          Detta är väldigt användbart när vi jobbar med databaser i produktion.
+        </p>
+        <p>
+          För att få en klarare bild av det så gör vi det praktiskt. Vi ska utgå
+          från samma databas som vi skapade i början av kursen. Den här gången
+          har jag tömt den manuellt med hjälp av DBeaver. Detta för att vi ska
+          kunna se att Migrate fungerar som det ska. Jag har kvar tabellen user.
+        </p>
+
+        <h2 id="section-2">Kom igång med Migrate</h2>
+        <span class="anchor"><a href="#section-2">#</a></span>
+        <p>
+          För att komma igång med Migrate så behöver vi installera det. Det gör
+          vi med hjälp av pip:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code class="language-bash">pip install Flask-Migrate</code></pre>
+
+        <p>
+          Vi kommer att fortsätta att använda oss av förra projektets kod. Den
+          finner du här:
+        </p>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/mattiasstjernstrom/PVSPYH23/tree/main/sql-alchemy-PageSort"
+              target="_blank"
+              >Hela koden hittar du på github!</a
+            >
+          </li>
+        </ul>
+        <p>
+          Vi kommer att behöva göra några ändringar i vår <code>app.py</code>.
+          Vi behöver importera Migrate från flask_migrate. Vi kommer även att
+          skapa en instans av Migrate och koppla ihop den med vår app. Det gör
+          vi såhär:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python line-numbers"><code># Existerande kod i app.py ovan...
+from flask_migrate import Migrate
+app = Flask(__name__)
+app.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = "mysql+mysqlconnector://root:password@localhost:3306/flask_db"
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+# Existerande kod i app.py nedan ...</code></pre>
+
+        <p>
+          När vi har installerat Flask-Migrate och skrivit dessa rader så
+          behöver vi skapa en migrationsmapp. Vi kör helt enkelt kommandot:
+
+          <!-- prettier-ignore -->
+        </p>
+
+        <pre
+          class="language-bash"
+        ><code class="language-bash">flask db init</code></pre>
+
+        <p>
+          Då skapas en mapp i vår projektstruktur som heter migrations. I den
+          mappen kommer alla våra migrationsfiler att ligga. Vi kommer att skapa
+          en migrationsfil för varje ändring vi gör i databasen. Vi kommer att
+          se hur det fungerar i nästa avsnitt.
+        </p>
+
+        <h2 id="section-3">Skapa en migrationsfil</h2>
+        <span class="anchor"><a href="#section-3">#</a></span>
+
+        <p>
+          Vi genererar en initial migration. En startpunkt, på hur databasen såg
+          ut från början. Det gör vi med hjälp av kommandot:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code class="language-bash">flask db migrate -m "Initial migration."</code></pre>
+
+        <p>
+          Om vi kollar i databasen nu, så har det skapats en tabell i databasen
+          som heter <code>alembic_verion</code>. Då har vi gjort allt rätt.
+        </p>
+        <p>
+          Vi fortsätter nu med att starta vår app från förra kapitlet, den som
+          seedar användare. Nu ska vi testa att göra en ändring i databasen. Vi
+          ska lägga till en kolumn i tabellen user. Vi lägger till en kolumn som
+          heter <code>age</code> och som är av typen <code>Integer</code>. Vi
+          lägger till den i vår modell <code>User</code> i filen:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-python line-numbers"><code># Existerande kod i app.py ovan...
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), nullable=False)
+    age = db.Column(db.Integer, nullable=True) # Ny kolumn
+
+# ...</code></pre>
+
+        <p>
+          Vi behöver nu skapa en ny migrationsfil som beskriver ändringen vi
+          gjort i databasen. Vi stänger av appen med <code>Ctrl + c</code> och
+          kör kommandot:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code>flask db migrate -m "Added age column."</code></pre>
+
+        <p>
+          Nu har vi skapat en ny migrationsfil som beskriver ändringen vi gjort
+          i databasen. Vi kan nu köra kommandot:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code>flask db upgrade</code></pre>
+
+        <p>
+          Detta för att uppdatera databasen med den nya ändringen. Om vi nu
+          kollar i databasen så har det skapats en ny kolumn som heter
+          <code>age</code>. Vi har nu gjort en ändring i databasen och
+          uppdaterat den med hjälp av Migrate.
+        </p>
+
+        <h2 id="section-4">Ta bort en kolumn</h2>
+        <span class="anchor"><a href="#section-4">#</a></span>
+
+        <p>
+          Vi ska nu testa att ta bort en kolumn i databasen. Vi ska ta bort
+          kolumnen <code>age</code> som vi precis skapade. Vi tar bort den vi
+          just skapade från vår modell <code>User</code> i filen
+          <code>app.py</code>. Alltså <code>age = db.Column ...</code> Vi tar
+          även bort den från vår migrationsfil. Vi kör kommandot:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code>flask db migrate -m "Removed age column."</code></pre>
+
+        <p>
+          Nu har vi skapat en ny migrationsfil som beskriver ändringen vi gjort
+          i databasen. Vi kan nu köra kommandot:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code>flask db upgrade</code></pre>
+
+        <p>
+          Detta för att uppdatera databasen med den nya ändringen. Om vi nu
+          kollar i databasen så har kolumnen <code>age</code> tagits bort. Var
+          försiktig här. Datan i kolumnen kommer att försvinna. Om du vill
+          behålla datan så behöver du flytta den till en annan kolumn eller gör
+          en backup på databasen innan du tar bort den.
+        </p>
+
+        <h2 id="section-5">Downgrade</h2>
+        <span class="anchor"><a href="#section-5">#</a></span>
+
+        <p>
+          Vi kan även återställa databasen till en tidigare version. Vi kan
+          återställa den till den näst nyaste versionen av databasen. Vi kör
+          kommandot:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code>flask db downgrade</code></pre>
+
+        <p>
+          Då återställs databasen till den version som vi skapade i början av
+          kursen. Om vi kollar i databasen så har kolumnen <code>age</code>
+          tagits bort.
+        </p>
+        <h4>MEN!</h4>
+        <p>
+          Om vi gör på detta sättet, med downgrade, så kommer age finnas kvar i
+          vår modell. Och vi kommer då att få ett felmeddelande när vi försöker
+          köra vår app:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code>Unknown column 'user.age' in 'field list'</code></pre>
+
+        <p>
+          Så var försiktig med att använda downgrade. Det är bättre att använda
+          sig av en ny migration som tar bort kolumnen.
+        </p>
+
+        <h2 id="section-6">Vad ska vi ha det här till då?</h2>
+        <span class="anchor"><a href="#section-6">#</a></span>
+
+        <p>
+          Det här är ett väldigt användbart verktyg när vi jobbar med databaser.
+          Vi kan enkelt återställa databasen till en tidigare version om vi
+          skulle behöva det. Detta är väldigt användbart när vi jobbar med
+          databaser i produktion.
+        </p>
+
+        <p>
+          Detta kan vara väldigt användbart när vi ska flytta en databas från en
+          miljö till en annan. Migrate-filerna i mappen migrations är allt som
+          behövs för att se till att databasen är uppdaterad (eller
+          nedgraderad).
+        </p>
+        <p>
+          Det gör även att vi undviker att radera hela databasen när vi byter
+          miljö, eftersom den är versionerad. Har du rätt version, så har du
+          rätt databas och du kan köra din app utan att skriva över databasen.
+        </p>
+        <p>
+          Inne i versionsfilerna i Migrate så finns det beskrivet vad som gjorts
+          i databasen mellan de olika versionerna. Det gör det även enklare att
+          felsöka om något skulle gå fel.
+        </p>
+
+        <ul>
+          <li>
+            <a
+              href="https://github.com/mattiasstjernstrom/PVSPYH23/tree/main/sql-alchemy-PageSort"
+              target="_blank"
+              >Hela koden hittar du på github!</a
+            >
+          </li>
+        </ul>
+      </article>
+
+      <section class="next">
+        <a href="sql-alchemy-intermediate-2.html">&larr; Föregående kapitel</a>
+        -
+        <span class="disabled">Nästa kapitel &rarr;</span>
+      </section>
+    </main>
+  </body>
+</html>
