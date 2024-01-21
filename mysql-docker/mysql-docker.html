@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode"
+          />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">SQL-genomgång med Docker</h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>
+          I samtliga genomgångar så kommer jag att använda mig av docker för att
+          köra mina databaser. Detta är för att det är enkelt och smidigt att
+          använda sig av. Jag kommer att använda mig av <code>MySQL</code> i
+          samtliga genomgångar.
+        </p>
+        <p>
+          Jag använder mig av <code>Docker</code> för att det är enkelt att
+          sätta upp och använda sig av. Vi kommer gå igenom det lite snabbt här.
+          Men först ska vi reda ut några begrepp:
+        </p>
+
+        <h2 id="section-1">Skillnaden mellan VM och Docker</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+
+        <p>
+          Utvecklare har användt sig av virutella maskiner (VM) i
+          <a
+            href="https://blog.aquasec.com/a-brief-history-of-containers-from-1970s-chroot-to-docker-2016"
+            >sedan 1979</a
+          >. Det är ett sätt att köra ett operativsystem i ett annat
+          operativsystem. Detta gör att vi kan köra program som vi kanske inte
+          kan köra på vårt operativsystem. Detta är väldigt användbart när vi
+          ska köra databaser eller andra program som vi kanske inte vill ha på
+          vår dator.
+        </p>
+
+        <p>
+          Vi kan likna det med att vi har en ny dator inne i vår dator. En
+          virtuell dator. Denna dator är helt isolerad från vår dator. Vi kan
+          inte komma åt den från vår dator som vi kan komma åt andra program. Vi
+          kan inte heller komma åt vår dator från den virtuella datorn. Vi kan
+          installera program och köra program i denna virtuella dator.
+        </p>
+        <p>
+          Detta är väldigt användbart när vi ska köra databaser. Vi kan
+          installera en databas i vår virtuella dator och köra den där. Vi kan
+          sedan kommunicera med den virtuella datorn från vår dator via
+          ip-adressen. Detta kan liknas med att vi har en server som vi
+          kommunicerar med som finns någon annanstans.
+        </p>
+
+        <p>
+          Docker innehåller inte ett operativsystem som en virtuell maskin gör.
+          Utan använder sig av något som kallas för <code>container</code>. Det
+          är som en app, som du kan installera enskilda program i istället för
+          att behöva installera ett helt operativsystem till på din dator. Detta
+          gör att docker är väldigt lättviktigt och snabbt att använda sig av.
+        </p>
+
+        <h3>Docker Inc</h3>
+        <p>
+          Docker ett verktyg som ägs av företaget Docker Inc. Det finns andra
+          typer av containers. Vi kommer att använda oss av appen Docker i denna
+          kurs.
+        </p>
+
+        <h2 id="section-2">Vad är MySQL då?</h2>
+        <span class="anchor"><a href="#section-2">#</a></span>
+
+        <p>
+          Vi kommer även att använda oss av MySQL. MySQL är ett sk. RDBMS,
+          SQL-relationsdatabashanteringssystem. Det är ett av de mest populära
+          databashanteringsprogrammen som används idag. Det är väldigt lätt att
+          använda sig av och är väldigt snabbt.
+        </p>
+        <p>
+          Trotts namnet så är MySQL inte relaterat till SQL. SQL är ett språk
+          som används för att kommunicera med databaser. MySQL är ett program
+          utvecklat av Oracle, som vi kan använda för att hantera databaser.
+          MySQL använder sig av dock av SQL för att kommunicera med databasen.
+        </p>
+        <p>
+          Vi kommer att använda oss av en relationsdatabas genom MySQL. Detta
+          betyder att vi kommer att ha flera tabeller som är relaterade till
+          varandra. Det finns flera olika relationsdatabaser som vi kan använda
+          oss av, tex mariaDB, som är en sk. fork av MySQL.
+        </p>
+      </article>
+
+      <section class="next"><a href="/PVSPYH23/">Till index-sidan</a></section>
+    </main>
+  </body>
+</html>
