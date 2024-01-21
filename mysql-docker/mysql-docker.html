@@ -41,7 +41,7 @@
       <h3 class="subtitle">PVSPYH23 Edition</h3>
 
       <article>
-        <h2 id="section-head">SQL-genomgång med Docker</h2>
+        <h2 id="section-head">MySQL-genomgång med Docker</h2>
         <span class="anchor"><a href="#section-head">#</a></span>
         <p>
           I samtliga genomgångar så kommer jag att använda mig av docker för att
@@ -120,6 +120,112 @@
           betyder att vi kommer att ha flera tabeller som är relaterade till
           varandra. Det finns flera olika relationsdatabaser som vi kan använda
           oss av, tex mariaDB, som är en sk. fork av MySQL.
+        </p>
+        <h2 id="section-3">Komma igång</h2>
+        <span class="anchor"><a href="#section-3">#</a></span>
+        <p>
+          Vi brörjar med att ladda ner
+          <a href="https://docs.docker.com/get-docker/" target="_blank"
+            >Docker</a
+          >
+          och installerar det. Sedan måste vi öppna upp terminalen och skriva
+          följande kommando:
+        </p>
+
+        <!-- prettier-ignore -->
+        <pre class="language-bash"><code class="language-bash">docker run --name min_databas -e MYSQL_ROOT_PASSWORD=1234 -d -p 3306:3306 mysql:latest</code></pre>
+
+        <p>
+          Detta kommer att ladda ner den senaste versionen av MySQL och köra den
+          i en container. Vi kan gå igenom vad alla kommandon betyder:
+        </p>
+
+        <ol>
+          <li><code>docker run</code> - Detta kommer att köra en container.</li>
+          <li>
+            <code>--name min_databas</code> - Detta kommer att ge vår container
+            ett namn. Vi kan använda oss av detta namn för att kommunicera med
+            vår container.
+          </li>
+          <li>
+            <code>-e MYSQL_ROOT_PASSWORD=1234</code> - Detta kommer att sätta
+            ett lösenord för vår databas. Vi kan använda oss av detta lösenord
+            för att logga in i vår databas.
+          </li>
+          <li>
+            <code>-d</code> - Detta kommer att köra vår container i bakgrunden.
+          </li>
+          <li>
+            <code>-p 3306:3306</code> - Detta kommer att binda vår container
+            till port 3306. Detta är standardporten för MySQL. Detta gör att vi
+            kan kommunicera med vår container via port 3306 (Med tex MySQL
+            brukar man använda sig av port 3306).
+          </li>
+          <li>
+            <code>mysql:latest</code> - Detta är ett namn på en image som vi
+            vill köra. Vi kan använda oss av olika images för att köra olika
+            program. Vi kommer att använda oss av MySQL:latest i denna
+            genomgång. Det spelar ingen större roll.
+          </li>
+          <p></p>
+        </ol>
+
+        <h2 id="section-4">Kommunicera med vår container</h2>
+        <span class="anchor"><a href="#section-4">#</a></span>
+
+        <p>
+          Nu när vi har kört vårt kommando så har vi en container som körs i
+          bakgrunden. Vi kan nu kommunicera med vår container. Nu kan vi öppna
+          Docker Desktop och se att vår container körs.
+        </p>
+
+        <!-- ! Bild från docker -->
+
+        <p>
+          Vi laddar också ner ett program som heter
+          <a href="https://dbeaver.io/download/" target="_blank">DBeaver</a>, en
+          databasvisualiserare, som vi kan använda för att kommunicera med vår
+          databas. Vi kan nu öppna upp DBeaver och skapa en ny anslutning.
+        </p>
+        <p>Vi väljer MySQL som databas och skriver in följande information:</p>
+
+        <ol>
+          <li><code>Host</code> - localhost</li>
+          <li><code>Port</code> - 3306</li>
+          <li><code>User name</code> - root</li>
+          <li><code>Password</code> - 1234</li>
+        </ol>
+
+        <p>
+          När vi kör MySQL så kommer vi även att behöva ändra
+          <code>allowPublicKeyRetrieval</code> till <code>true</code>. Detta har
+          en logisk förklaring som vi inte kommer att gå igenom här, men vill
+          man läsa om det så kan du göra
+          <a
+            href="https://github.com/dbeaver/dbeaver/issues/9565#issuecomment-680773545"
+            >det här</a
+          >.
+        </p>
+
+        <!-- ! Bilder -->
+
+        <p>
+          Jag brukar ha som vana att testa anslutningen för att se att allt
+          fungerar, annars så måste vi fylla i allt igen. Vi kan nu se att vi
+          har en anslutning till vår databas.
+        </p>
+
+        <p>
+          Vi kan nu trycka på ansluta till vår databas. Vi kan nu se att vi har
+          en databas som heter <code>mysql</code>. Detta är en databas som
+          innehåller information om vår databas. Vi kan nu skapa en ny databas
+          som vi kan använda oss av.
+        </p>
+
+        <h3>That's it! Nu kan vi, om vi vill ändra i vår databas här!</h3>
+        <p>
+          Kom ihåg att vi kan skapa flera databaser i vår container. Vi behöver
+          inte göra olika för olika projekt!
         </p>
       </article>
 
