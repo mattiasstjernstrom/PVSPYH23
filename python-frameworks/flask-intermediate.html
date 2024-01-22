@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode"
+          />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">Kapitel 11: Flask - Länkar och subfolders</h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>
+          Eftersom vi flask kan skapa routes som är dynamiska så kan vi också
+          skapa länkar som är dynamiska. Detta gör vi genom att använda
+          <code>url_for()</code> funktionen. Vi har pratat om den lite tidigare.
+          Men när appen växer så måste vi ha full förståelse för hur den
+          fungerar.
+        </p>
+        <p>
+          Nu ska vi bygga en template som vi kommer att använda för att visa
+          alla sidor dynamiskt innanför. Precis som i exemplet om
+          render_template. Vi kommer också att lägga till en subfolder-route. En
+          route som ser ut som om det är en mapp. Alltså till exempel "folder" i
+          denna sökväg:
+          <code
+            >127.0.0.1/<span style="text-decoration: underline">folder</span
+            >/foo.html</code
+          >. Det här kommer att göra att hårdkodade länkar inte går dit dom är
+          tänkt att gå.
+        </p>
+
+        <h2 id="section-1">Snygga till Sökfunktionen</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+
+        <p>
+          I det här exemplet har jag gjort en sparat css-fil till vår
+          applikation. Den lägger jag i en ny mapp i projektet som heter
+          <code>static</code>. Så här ser strukturen ut då:
+        </p>
+
+        <!--prettier-ignore-->
+        <pre><code class="language-python">app.py
+migrations/
+    *massa filer*
+static/
+    css/
+       style.css
+templates/
+    index.html
+    sok.html
+    uppdatera.html
+    template.html</code></pre>
+
+        <p>
+          Jag har även lagt till en template, som vi gjorde i övningen med
+          render_template. Den nya koden hittar du här om du vill kopiera den:
+        </p>
+
+        <ul>
+          <li>
+            <a href="#" target="_self">Ny koden vi arbetar med (på github)</a>
+          </li>
+        </ul>
+
+        <p>
+          Om du vill öva själv på att addera templates så har jag i denna, lite
+          ändrade kod gjort:
+        </p>
+
+        <ol>
+          <li>
+            Lagt till en ny <code>template.html</code> i foldern
+            <code>templates</code>
+          </li>
+          <li>
+            Ändrat samtliga html-filer så att den använder
+            <code>template.html</code>, alltså lagt till
+            <code>{% extends template.html%} {% block content %}</code> före
+            koden och <code>{% endblock %}</code>
+          </li>
+          <li>
+            Lagt till en css-fil i foldern <code>static/css</code> som heter
+            <code>style.css</code>. Denna har jag skrivit lite css i för att
+            göra det lite snyggare. Du kan kopiera den om du vill, annars kan du
+            göra din egen.
+          </li>
+          <li>
+            Jag har även ändrat minimalt i <code>index.html</code>. För att få
+            lite mer korrekt html. Det jag har gjort är att jag har lagt till
+            <code>label</code> istället för rubriker. Detta för att det är mer
+            korrekt html. Jag har även lagt till en <code>id</code> på sökfältet
+            och "Lägga till användare".
+          </li>
+        </ol>
+        <p>Annars så ska det fungera ungefär lika som innan.</p>
+
+        <h2 id="section-2">Länkar till externa filer</h2>
+        <span class="anchor"><a href="#section-2">#</a></span>
+      </article>
+
+      <section class="next">
+        <a href="sql-alchemy-intermediate-3.html">&larr; Föregående kapitel</a>
+        -
+        <span class="disabled">Nästa kapitel &rarr;</span>
+      </section>
+      <section class="next"><a href="/PVSPYH23">Till index-sidan</a></section>
+    </main>
+  </body>
+</html>
