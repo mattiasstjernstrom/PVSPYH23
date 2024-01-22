@@ -124,4 +124,4 @@ def sok():
 
 if __name__ == "__main__":
     create_user_table()
-    app.run(use_reloader=True)
+    app.run(debug=True)
