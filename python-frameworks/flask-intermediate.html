@@ -92,7 +92,11 @@ templates/
 
         <ul>
           <li>
-            <a href="#" target="_self">Ny koden vi arbetar med (på github)</a>
+            <a
+              href="https://github.com/mattiasstjernstrom/PVSPYH23/tree/main/flask-S%C3%B6kfunktionen-formaterad-1"
+              target="_blank"
+              >Ny koden vi arbetar med (på github)</a
+            >
           </li>
         </ul>
 
@@ -128,8 +132,28 @@ templates/
         </ol>
         <p>Annars så ska det fungera ungefär lika som innan.</p>
 
-        <h2 id="section-2">Länkar till externa filer</h2>
+        <h2 id="section-2">Problem 1 - Css-filen hittas inte</h2>
         <span class="anchor"><a href="#section-2">#</a></span>
+        <p>
+          Nu när vi startar appen så kommer den att vara lite mer finare
+          grafiskt. Vi har även lite finare resultat när vi söker på användare.
+          Men när vi klickar på "uppdatera" på en användare så stöter vi på ett
+          litet problem. Eftersom sökvägen till css-filen är hårdkodad och vi
+          hamnar dynamiskt på subfoldern
+          <code>/uppdatera/</code> så kommer den inte att hitta css-filen.
+        </p>
+        <span class="note"
+          >Flask bygger upp URL-en som vi anget i route som att det skulle
+          finnas en subfolder, fast det inte gör det. Förvirrande, eller
+          hur?!</span
+        >
+        <p>
+          Sökvägen vi försöker att komma åt är ju
+          <code>uppdatera/static/style.css</code> men filen ligger på
+          <code>static/style.css</code>. Detta är ett problem som vi kan lösa
+          med hjälp av <code>url_for()</code>. För att slippa skapa fler
+          css-filer till varje subfolder.
+        </p>
       </article>
 
       <section class="next">
