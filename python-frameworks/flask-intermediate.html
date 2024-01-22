@@ -132,7 +132,7 @@ templates/
         </ol>
         <p>Annars så ska det fungera ungefär lika som innan.</p>
 
-        <h2 id="section-2">Problem 1 - Css-filen hittas inte</h2>
+        <h2 id="section-2">Css-filen hittas inte</h2>
         <span class="anchor"><a href="#section-2">#</a></span>
         <p>
           Nu när vi startar appen så kommer den att vara lite mer finare
@@ -154,6 +154,17 @@ templates/
           med hjälp av <code>url_for()</code>. För att slippa skapa fler
           css-filer till varje subfolder.
         </p>
+        Så här:
+        <!--prettier-ignore-->
+        <pre><code class="language-jinja2">&lt;link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" /&gt;</code></pre>
+
+        <p>Istället för:</p>
+        <!--prettier-ignore-->
+        <pre><code class="language-jinja2">&lt;link rel="stylesheet" href="static/css/style.css" /&gt;</code></pre>
+
+        <p></p>
+        <h2 id="section-3">Fortsättning följer...</h2>
+        <span class="anchor"><a href="#section-3">#</a></span>
       </article>
 
       <section class="next">
