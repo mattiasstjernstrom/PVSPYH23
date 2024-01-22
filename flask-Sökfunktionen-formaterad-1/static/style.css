@@ -113,6 +113,20 @@ main ul li {
 main ul li form {
   display: inline-flex;
   flex-direction: row;
+  margin-bottom: 0rem;
+}
+
+main ul li form button {
+  background-color: transparent;
+  color: #333;
+  border: none;
+  text-decoration: underline;
+  font-size: 1rem;
+}
+
+main ul li form button:hover {
+  background-color: transparent;
+  color: #6d6d6d;
 }
 
 main ul li:nth-child(odd) {

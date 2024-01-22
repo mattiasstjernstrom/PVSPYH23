@@ -76,6 +76,32 @@
   scrollbar-width: thin;
   min-width: 0%;
 }
+html {
+  hanging-punctuation: first last;
+}
+
+img,
+picture,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+p {
+  max-width: 75ch;
+  text-wrap: pretty;
+}
 
 body {
   font-size: var(--font-size);
@@ -84,7 +110,14 @@ body {
   font-family: var(--article-font-family);
   color: var(--article-font-color);
   background-color: var(--background-color);
-  min-height: 100vh;
+  height: 100svh;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :has(:target) {
+    scroll-behavior: smooth;
+    scroll-padding-top: 3rem;
+  }
 }
 
 .progress-container {
