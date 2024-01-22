@@ -1,0 +1,30 @@
+{% extends "template.html" %}{% block content %}
+
+<h1>Sökresultat</h1>
+<div class="sort">
+  <h3>Sortera efter:</h3>
+  <a href="{{ url_for('sok', input=q, sort='name_asc', page=current_page) }}"
+    >Namn A-Ö</a
+  >
+  <a href="{{ url_for('sok', input=q, sort='name_desc', page=current_page) }}"
+    >Namn Ö-A</a
+  >
+  <a href="{{ url_for('sok', input=q, sort='email_asc', page=current_page) }}"
+    >Email A-Ö</a
+  >
+  <a href="{{ url_for('sok', input=q, sort='email_desc', page=current_page) }}"
+    >Email Ö-A</a
+  >
+</div>
+<ul>
+  {% for user in results %}
+  <li>
+    <h2>{{ user.name }}</h2>
+    <p>{{ user.email }}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% if prev_url %}
+<a href="{{ prev_url }}">Föregående sida</a> {% endif %} {% if next_url %}
+<a href="{{ next_url }}">Nästa sida</a>
+{% endif %} {% endblock %}

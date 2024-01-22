@@ -1,0 +1,28 @@
+{% extends "template.html" %}{% block content %}
+<form action="/sok">
+  <label for="q">Sök efter användare:</label>
+  <input type="text" id="q" name="q" placeholder="Sök efter användare" />
+  <button type="submit">Sök</button>
+</form>
+
+<h1>Alla användare</h1>
+<ul>
+  {% for user in users %}
+  <li>
+    {{ user.name }} - {{ user.email }} -
+    <a href="/uppdatera/{{ user.id }}">Uppdatera</a>
+    <form action="/?_method=delete" method="post">
+      <input type="hidden" name="id" value="{{ user.id }}" />
+      <button type="submit">Ta bort</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+
+<form action="/" method="POST">
+  <label for="name">Lägg till användare:</label>
+  <input type="text" id="name" name="name" placeholder="Namn" />
+  <input type="email" id="email" name="email" placeholder="Email" />
+  <button type="submit">Skicka</button>
+</form>
+{% endblock %}
