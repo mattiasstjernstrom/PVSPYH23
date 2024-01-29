@@ -10,7 +10,7 @@
   --header-font-size: 3rem;
 
   --article-padding: 0 0.5em;
-  --article-max-width: 40rem;
+  --article-max-width: 60rem;
   --article-font-weight: 400;
   --article-line-height: 1.5;
   --article-font-family: "Noto Sans", sans-serif;
@@ -45,7 +45,7 @@
   --header-font-size: 3rem;
 
   --article-padding: 0 0.5em;
-  --article-max-width: 40rem;
+  --article-max-width: 60rem;
   --article-font-weight: 400;
   --article-line-height: 1.5;
   --article-font-family: "Noto Sans", sans-serif;
@@ -99,7 +99,6 @@ h6 {
 }
 
 p {
-  max-width: 75ch;
   text-wrap: pretty;
 }
 
