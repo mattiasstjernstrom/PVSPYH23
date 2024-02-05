@@ -297,7 +297,7 @@ from flask import flash # ... mfl.
       </p>
       <!--prettier-ignore-->
       <pre><code class="language-css line-numbers">/* style.css ... */
-.alert {
+.alert { /* container för alla flash-meddelanden */
   position: absolute;
   z-index: 100;
   top: 0;
@@ -305,7 +305,7 @@ from flask import flash # ... mfl.
   right: 0;
 }
 
-.alert-success {
+.alert-success { /* klass för lyckade meddelanden */
   width: 300px;
   background-color: #4caf50;
   color: white;
