@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet" />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode" />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">
+          Kapitel 12: Wtforms, Del 1. Rendering och skicka data
+        </h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>
+          Wtforms är ett tillägg till Flask och är en utmärkt lösning för att
+          hantera formulär i Flask. Det är enkelt att använda och har en mängd
+          inbyggda funktioner som gör det enkelt att hantera formulär. Det är
+          också enkelt att anpassa och utöka för att passa dina specifika behov.
+          Som till exempel validering av formulär, skydd mot CSRF-attacker och
+          mycket mer.
+        </p>
+        <h2 id="section-1">Varför Wtforms?</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+        <p>
+          Jag föredrar vanligtvis att bygga mina egna formulär från grunden. Men
+          i takt med att en applikation växer så vill man inte sitta och skriva
+          valideringar och annat för varje formulär. Då kan det vara skönt att
+          använda sig av ett ramverk som Wtforms. Det är enkelt att använda och
+          har en mängd inbyggda funktioner som gör det enkelt att hantera
+          formulär. Det är också enkelt att anpassa och utöka för att passa dina
+          specifika behov.
+        </p>
+
+        <h2 id="section-2">Installation</h2>
+        <span class="anchor"><a href="#section-2">#</a></span>
+        <p>
+          För att installera Wtforms så behöver vi installera Flask-WTF
+          biblioteket. Detta kan vi göra genom att köra följande kommando i
+          terminalen:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="language-bash">pip install WTForms</code></pre>
+        <p>
+          Nu så kan vi börja använda det! Vi kommer att utgå från vårt
+          föregående exempel och bygga vidare på det. Om du inte har hela koden
+          så finns den på
+          <a
+            href="https://github.com/mattiasstjernstrom/PVSPYH23/tree/main/flask-S%C3%B6kfunktionen-formaterad-1"
+            target="_blank"
+            >Github</a
+          >
+          att klona eller ladda ner.
+        </p>
+        <h2 id="section-3">Rendera formulär</h2>
+        <span class="anchor"><a href="#section-3">#</a></span>
+        <p>
+          Vi kommer börja med att testa att rendera ett formulär. Wtforms kan
+          skapa väldigt komplexa formulär, men vi börjar simpelt. Vi kommer att
+          göra om vårt formulär för att skapa användare. Detta för att inte
+          utomstående skall kunna skapa en egen sida och skapa användare från en
+          fakesida och i sin tur kunna logga in som användere.
+        </p>
+        <p>
+          Vi börjar med att skapa en ny fil i huvudmappen som vi kallar för
+          <code>forms.py</code>. I denna fil så kommer vi att skapa vårt
+          formulär. Vi börjar med att importera de moduler som vi behöver:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="line-numbers language-python"># forms.py
+from flask_wtf import FlaskForm
+from wtforms import StringField, EmailField
+</code></pre>
+        <p>
+          Vi kommer nu att skapa en klass, som innehåller modellen för skapandet
+          av vår användare:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="line-numbers language-python"># ...
+class CreateUserForm(FlaskForm):
+    name = StringField('Användarnamn')
+    email = EmailField('E-post')
+</code></pre>
+        <p>
+          Vi har nu skapat det allra simplaste formuläret man kan göra i flask.
+          Alltså bara två rader av kod. Där vi specificerar att vi vill ha en
+          sträng och en e-post. Vi kan nu använda oss av detta i vår
+          <code>app.py</code> fil. Vi börjar med att importera vårt formulär:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="line-numbers language-python"># app.py
+from forms import CreateUserForm
+</code></pre>
+        <p>
+          Vi kan nu använda oss av vårt formulär i vår <code>app.py</code> fil.
+          Vi börjar med att skapa en ny route för att skapa användare:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="line-numbers language-python"># ...
+@app.route('/create_user', methods=['GET', 'POST'])
+def create_user():
+
+    form = CreateUserForm()
+    return render_template('create_user.html', title='Skapa användare', form=form)
+            </code></pre>
+        <h3>Kodsammanfattning</h3>
+        <p>
+          I vår nya route så skapar vi en instans av vårt formulär. Vi validerar
+          sedan formuläret och om det är korrekt så skickar vi användaren
+          tillbaka till startsidan. Om formuläret inte är korrekt så skickar vi
+          användaren tillbaka till sidan (vi skickar även med forms) för att
+          skapa användare. Vi importerar även flash från flask för att kunna
+          skicka meddelanden till användaren (den kommer vi att använda senare):
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="language-python"># app.py
+from flask import flash #...mfl.
+</code></pre>
+        <p>
+          Vi måste också skapa en secret key för att kunna använda oss av
+          Wtforms. Detta gör vi genom att skriva följande kod i vår
+          <code>app.py</code> fil:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="language-python"># app.py ...
+app.config["SECRET_KEY"] = "mysecretkey" # "mysecretkey" kan vara vad som helst just nu
+# ...
+</code></pre>
+        <span class="note"
+          >Lägg denna tillsammans med sökvägen till databasen och de andra
+          konfigrueringarna</span
+        >
+        <p>
+          Vi skapar sedan en ny html-fil som vi kallar för
+          <code>create_user.html</code>:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="line-numbers language-jinja2">{# create_user.html #}
+{% extends "template.html" %}
+{% block content %}
+    &lt;h1&gt;Skapa användare&lt;/h1&gt;
+    &lt;form method="POST"&gt;
+            {{ form.name.label }}
+            {{ form.name }}
+            {{ form.email.label }}
+            {{ form.email }}
+        &lt;div&gt;
+            &lt;button type="submit"&gt;Skapa användare&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+{% endblock %}
+</code></pre>
+        <h3>Kodsammanfattning</h3>
+        <p>
+          Vi har alltså skapat en <code>html-form</code> som vi sedan renderar
+          till användaren, som görs om till två <code>input-fält</code> och vi
+          har även lagt till en <code>label</code>
+          för att göra det mer användarvänligt. Vi har även lagt till en
+          <code>submit-knapp</code> för att skicka formuläret till servern.
+          Detta kan göras med <code>Wtforms</code> också, men tyvärr inte med
+          button-taggen som jag föredrar att använda.
+        </p>
+        <span class="note"
+          >Tips: Högerklicka &raquo; Inspektera koden så ser du vad som hänt i
+          renderingen</span
+        >
+        <h2 id="section-4">Skicka data till server</h2>
+        <span class="anchor"><a href="#section-4">#</a></span>
+        <p>
+          Om vi försöker skicka med vår nya kod, så kommer det såklart inte att
+          fungera eftersom vi inte har skapat någon logik för att ta emot datan
+          i vår flask-applikation. Vi har redan logiken för funktionen att skapa
+          användare, men vi behöver routen att snappa upp det.
+        </p>
+        <p>
+          Så vi börjar med att återanvända samma route som vi har till
+          <code>create_user.html</code>. Där vi skapar en ny logik för att ta
+          emot data:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="line-numbers language-python"># app.py ...
+@app.route('/create_user', methods=['GET', 'POST'])
+def create_user():
+
+    form = CreateUserForm(request.form)
+
+    if form.validate_on_submit():
+        user = User(name=form.name.data, email=form.email.data)
+        db.session.add(user)
+        db.session.commit()
+
+    return render_template("create_user.html", title="Skapa användare", form=form)
+#...
+</code></pre>
+        <h3>Kodsammanfattning</h3>
+        <p>
+          Vi har alltså lagt till en if-sats som kollar om formuläret är
+          korrekt, med hjälp av <code>Wtforms</code> egna
+          <code>validate_on_submit</code>-funktion. Om formuläret är korrekt så
+          skickas du till startsidan och användaren är skapad. Om formuläret
+          inte är korrekt så skickar vi användaren tillbaka till sidan för att
+          skapa användare.
+        </p>
+        <p>
+          Vi har nu skapat ett formulär och skickat datan till servern. Vi har
+          även skapat en logik för att ta emot datan och skicka tillbaka
+          användaren till startsidan.
+        </p>
+        <h3>Ooops!</h3>
+        <p>
+          Om vi försöker skicka detta, så händer ingenting. Detta beror på att
+          vi inte har skapat någon <code>CSRF</code>-nyckel än. En CSRF-nyckel
+          <em>(Cross-site request forgery</em>-nyckel) är en unik nyckel som
+          används för att skydda din webbapplikation mot CSRF-attacker. Detta är
+          en inbyggd säkerhetsåtgärd i <code>Wtforms</code> som används för att
+          förhindra att en användare skickar in data till din webbapplikation
+          från en annan webbplats. Vi kan skapa en nyckel genom att skriva
+          följande inom <code>form</code>-taggarna, tillsammans med de andra
+          inputsen i vår <code>create_user.html</code>-fil:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="language-jinja2">{# create_user.html ... #}
+{{ form.hidden_tag() }}
+{# ... #}</code></pre>
+        <span class="note">
+          Högerklicka &raquo; Inspektera så ser du en ny input som har lagts
+          till med en lång konstig value. Detta är vår CSRF-nyckel.
+        </span>
+        <p>När du nu skickar formuläret så kommer det att fungera!</p>
+      </article>
+
+      <section class="next">
+        <a href="flask-intermediate.html">&larr; Föregående kapitel</a>
+        -
+        <a href="flask-intermediate-3.html">Nästa kapitel &rarr;</a>
+      </section>
+
+      <section class="next"><a href="/PVSPYH23/">Till index-sidan</a></section>
+    </main>
+  </body>
+</html>

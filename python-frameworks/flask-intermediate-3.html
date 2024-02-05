@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stjernström Learning. - Flask Beginner</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/article.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500;700&display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap"
+      rel="stylesheet" />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <!-- <link href="../css/prism-material-dark.css" rel="stylesheet" /> -->
+    <script src="../js/prism.js" defer></script>
+    <script src="../js/mainScripts.js" defer></script>
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <main>
+      <section class="dark-theme">
+        <div class="toggle-container">
+          <img
+            src="https://stjernstrom.me/PVSPYH23/assets/moon.svg"
+            alt="Dark Mode" />
+        </div>
+      </section>
+      <h1>Flask - Lätt och krafullt</h1>
+      <h3 class="subtitle">PVSPYH23 Edition</h3>
+
+      <article>
+        <h2 id="section-head">
+          Kapitel 12: Wtforms, Del 2. Validering och feedback
+        </h2>
+        <span class="anchor"><a href="#section-head">#</a></span>
+        <p>
+          När en användare skickar något i ett formulär vill vi inte bara ta
+          emot det och lagra det i en databas. Vi vill också validera att det
+          som skickas in är korrekt. Detta kan vara allt från att kolla att en
+          epostadress är korrekt formaterad till att kolla att ett lösenord är
+          tillräckligt säkert. Vi vill också försäkra användaren att det har
+          gått rätt till, eller varför något har gått fel.
+        </p>
+        <p>
+          Wtforms kommer med inbyggd validering och feedback. Vi kan använda oss
+          av inbyggda valideringsfunktioner, eller skapa egna. Vi kan också
+          skicka feedback till användaren om något har gått fel. Detta kan vara
+          allt från att skicka en enkel text till att skicka en lista med fel
+          och åtgärder.
+        </p>
+        <h2 id="section-1">Validering</h2>
+        <span class="anchor"><a href="#section-1">#</a></span>
+        <p>
+          Jag skrev att koden i vår senast skapade route kollade om formuläret
+          var korrekt. Detta var inte helt sant. Vi kollade om det var korrekt
+          mot vad vi hade bett Wtforms att validera. Vilket var, egentligen inte
+          mer än att det var en sträng och en epostadress vi skickade in. Detta
+          kollas redan i webbläsaren, men kan vara bra att kolla igen i backend.
+          Så att data inte kan manipuleras.
+        </p>
+        <p>
+          Vi ska därför lägga till lite validering i våra forms som vi skapat
+          med Wtforms. Vi börjar med att kolla om användaren inte lämnar något
+          fält tomt. Det gör vi i vår fil
+          <code>forms.py</code> där vi börjar med att importera
+          valideringsfunktionen <code>DataRequired</code>:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="language-python"># forms.py ...
+from wtforms.validators import DataRequired
+# ...</code></pre>
+        <p>
+          Vi importerar <code>DataRequired</code> från
+          <code>wtforms.validators</code>. Detta är en inbyggd
+          valideringsfunktion som kollar om ett fält är tomt. Vi kan nu använda
+          denna validering i våra formulär. Vi lägger till
+          <code>DataRequired</code> i våra formulärklasser:
+        </p>
+        <!--prettier-ignore-->
+        <pre><code class="language-python line-numbers"># forms.py ...
+class LoginForm(FlaskForm):
+    name = StringField("Användarnamn", validators=[DataRequired()])
+    email = EmailField("E-post", validators=[DataRequired()])</code></pre>
+      </article>
+
+      <p>
+        Den här koden kommer inte bara att lägga till <code>requried</code> och
+        rätt input-typ i jinjarenderingen av filen utan också i backend. Så
+        skulle du göra ett fält manuellt utan Wtforms så skulle det inte
+        valideras i backend.
+      </p>
+      <p>
+        Vi kan också lägga till en validering för att kolla att en epostadress
+        är korrekt formaterad. Detta är dock ett externt paket som vi måste
+        installera. Vi kan installera detta med pip:
+      </p>
+
+      <!--prettier-ignore-->
+      <pre><code class="language-bash">pip install email-validator</code></pre>
+      <p>
+        Det är vanligt att man lägger till en manuell validering av
+        epostadresser, så att man är säker på att man har skrivit rätt. Så det
+        ska vi också göra. Vi börjar med att importera valideringsfunktionen
+        <code>EqualTo</code>:
+      </p>
+      <!--prettier-ignore-->
+      <pre><code class="language-python"># forms.py ...
+from wtforms.validators import EqualTo # ... mfl.
+# ...</code></pre>
+
+      <p>
+        Sen scrollar vi ner lite i vår <code>forms.py</code> och lägger till
+        valideringen:
+      </p>
+      <!--prettier-ignore-->
+      <pre><code class="language-python line-numbers"># forms.py ...
+class LoginForm(FlaskForm):
+    name = StringField("Användarnamn", validators=[DataRequired()])
+    email = EmailField("E-post", validators=[DataRequired(), Email()])
+    email_confirm = EmailField(
+        "Bekräfta e-post",
+        validators=[
+            DataRequired(),
+            Email(),
+            EqualTo("email"),
+        ],
+    )</code></pre>
+      <p>
+        Vi behöver också lägga till ett extra fält i vår
+        <code>create_user.html</code> för att bekräfta epostadressen:
+      </p>
+      <!--prettier-ignore-->
+      <pre><code class="language-jinja2 line-numbers">{# create_user.html ... #}
+    {{ form.email_confirm.label }}
+    {{ form.email_confirm }}
+  {# ... #}</code></pre>
+
+      <p>
+        Nu har vi lagt till validering för att kolla att epostadressen är
+        korrekt, en sista sak vi vill ha med i vårt formulär denna gång är en
+        godkännandeknapp. Vi vill att användaren ska godkänna att vi lagrar
+        deras data. Vi gör om samma procedur som vi gjorde med epostadressen, vi
+        börjar med att imprtera <code>InputRequired</code> och sen lägger vi
+        till <code>BooleanField</code> också i vår <code>forms.py</code>:
+      </p>
+
+      <!--prettier-ignore-->
+      <pre><code class="language-python"># forms.py ...
+from wtforms import BooleanField # ... mfl.
+from wtforms.validators import InputRequired # ... mfl.
+# ...</code></pre>
+
+      <p>I klassen <code>CreateUserForm</code> lägger vi in ett nytt fält:</p>
+      <!--prettier-ignore-->
+      <pre><code class="language-python line-numbers"># forms.py / class CreateUserForm ...
+    confirm = BooleanField(
+    "Jag godkänner att mina uppgifter sparas", validators=[InputRequired()]
+)</code></pre>
+
+      <p>
+        Vi till sist lägger vi också till detta fält innanför
+        <code>form</code>-taggarna i <code>create_user.html</code>:
+      </p>
+      <!--prettier-ignore-->
+      <pre><code class="language-jinja2 line-numbers">{# create_user.html ... #}
+{{ form.confirm.label }}
+{{ form.confirm }}
+{# ... #}</code></pre>
+
+      <h2 id="section-2">Feedback</h2>
+      <span class="anchor"><a href="#section-2">#</a></span>
+
+      <p>
+        Nu har vi ett smakprov på några olika valideringar vi kan göra med
+        Wtforms. I dessa fall så har vi använt oss av inbyggda valideringar som
+        Wtforms kommer med och din webbläsare sköter redan en del av
+        valideringen. Men till exempel att en epostadresserna matchar varandra
+        får inte användaren veta, eftersom vi inte har skickat någon feedback.
+      </p>
+      <p>
+        För att skicka den typen av feedback till användaren så kan vi använda
+        oss av samma valideringsfunktioner vi redan byggt i
+        <code>form.py</code> genom att skicka in ett <code>message</code>:
+      </p>
+      <!--prettier-ignore-->
+      <pre><code class="language-python"># forms.py ...
+class CreateUserForm(FlaskForm):
+    name = StringField("Användarnamn", validators=[DataRequired(message="Fyll i namn")])
+    email = EmailField(
+        "E-post",
+        validators=[
+            DataRequired(message="Fyll i Epostadress"),
+            Email(message="Ogiltig e-post"),
+        ],
+    )
+    email_confirm = EmailField(
+        "Bekräfta e-post",
+        validators=[
+            DataRequired(message="Fyll i Epostadress"),
+            Email(message="Ogiltig e-post"),
+            EqualTo("email", message="E-postadresserna matchar inte"),
+        ],
+    )
+    confirm = BooleanField(
+        "Jag godkänner att mina uppgifter sparas",
+        validators=[InputRequired(message="Du måste godkänna villkoren")],
+    )</code></pre>
+
+      <p>
+        Vi ska också skicka feedback till användaren om något har gått fel i vår
+        <code>create_user.html</code>:
+      </p>
+
+      <!--prettier-ignore-->
+      <pre><code class="language-jinja2"># create_user.html ...
+&lt;ul style="color:red"&gt;
+  {% for field, error in form.errors.items() %}
+      &lt;li&gt;{{ error[0] }}&lt;/li&gt;
+  {% endfor %}
+&lt;/ul&gt;
+{# ... #}</code></pre>
+
+      <p>
+        Nu kommer vi att skicka en lista med felmeddelanden till användaren om
+        något har gått fel. I detta fall hinner webbläsaren skicka ett
+        felmedelande på allt utom att epostadresserna matchar varandra. Men du
+        kan <code>Högerklicka &raquo; Inspektera</code> och kolla vad som händer
+        om du tar bort <code>requried</code> på någon eller alla
+        <code>&lt;input&gt;</code> och försöker skicka ett tomt formulär.
+      </p>
+      <h3>Obeservera!</h3>
+      <p>
+        Det är alltid bra att kolla så dina felmeddelanden fungerar som de ska.
+        Jag antar att du förstod hur man tar bort <code>requried</code>. Men om
+        du inte skulle göra det så rekommendrar jag att testa med manuellt
+        skrivna <code>&lt;input&gt;</code> för att testa så att det inte går att
+        skicka något som inte är meningen att kunna skickas. Men glöm inte att
+        skicka med <code>csrf_token</code> i detta formulär i så fall.
+      </p>
+
+      <h2 id="section-3">Feedback på lyckad post</h2>
+      <span class="anchor"><a href="#section-3">#</a></span>
+      <p>
+        Det kan vara bra att skicka feedback till användaren om att allt har
+        gått som det ska. Det går att göra med hjälp av flash-meddelanden. Dessa
+        är inte en del av Wtforms utan av Flask. Men jag tycker att det passar
+        sig här under ändå och vi har redan förberett oss för detta i förra
+        kapitlet. Vi börjar med att importera <code>flash</code> i vår
+        <code>app.py</code>:
+      </p>
+      <!--prettier-ignore-->
+      <pre><code class="language-python"># app.py ...
+from flask import flash # ... mfl.
+# ...</code></pre>
+
+      <p>
+        Och i vår route <code>create_user</code> har vi redan lagt in
+        meddelandet:
+      </p>
+      <!--prettier-ignore-->
+      <pre><code class="language-python"># app.py ...
+    if form.validate_on_submit():
+        flash("Användare skapad", "success") # Detta är flash-meddelandet
+        return redirect(url_for("index"))
+# ...</code></pre>
+
+      <p>
+        Vi lägger också in en <code>div</code> i vår
+        <code>template.html</code> för att visa flash-meddelanden:
+      </p>
+      <!--prettier-ignore-->
+      <pre><code class="language-jinja2">&lt;!-- template.html ... --&gt;
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        &lt;div class="alert alert-{{ category }}"&gt;
+          {{ message }}
+        &lt;/div&gt;
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+{# ... #}</code></pre>
+
+      <p>
+        Nu kommer vi att skicka ett meddelande till användaren om att användaren
+        har skapats. Vi har också lagt till en klass på vår <code>div</code> som
+        vi kan använda för att styla våra meddelanden. Jag har valt en klass som
+        jag tycker passar bra till flash-meddelanden:
+      </p>
+      <!--prettier-ignore-->
+      <pre><code class="language-css line-numbers">/* style.css ... */
+.alert {
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.alert-success {
+  width: 300px;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  margin: 10px auto;
+  border-radius: 5px;
+  border: 1px solid #37913a;
+  font-weight: bold;
+  text-align: center;
+}
+/* ... */</code></pre>
+      <span class="note"
+        >OBS! Att detta är enbart en exempelklass. Du kan styla dina
+        flash-meddelanden hur du vill.</span
+      >
+      <h3>Observera</h3>
+      <p>
+        Flash-meddelanden är enbart giltliga för en request. Det betyder att om
+        du skickar ett flash-meddelande och sen skickar en redirect så kommer
+        meddelandet att försvinna. Detta kan vara bra att veta om du vill visa
+        meddelandet på en annan sida än där du skickar det.
+      </p>
+      <p>
+        Flash-meddelanden är hårdkodade men kan tasbort med hjälp av
+        <code>javascript</code> eller ladda om sidan. Dessa flash-meddelanden
+        är, som jag nämnde tidigare, en del av flask och kan användas till
+        mycket annat också. <br /><a
+          href="https://flask.palletsprojects.com/en/3.0.x/api/#flask.flash">
+          Läs mer om flash-meddelanden
+        </a>
+        i Flask dokumentation.
+      </p>
+      <p>
+        Nu har vi lagt till validering och feedback i våra formulär. Vi har
+        också lagt till feedback på lyckad post och hur vi kan visa dessa
+        meddelanden för användaren.
+      </p>
+
+      <section class="next">
+        <a href="/python-frameworks/flask-intermediate-2.html"
+          >&larr; Föregående kapitel</a
+        >
+        -
+        <span class="disabled">Nästa kapitel &rarr;</span>
+      </section>
+
+      <section class="next"><a href="/PVSPYH23/">Till index-sidan</a></section>
+    </main>
+  </body>
+</html>
